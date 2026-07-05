@@ -7,5 +7,16 @@ public enum Category {
     HIBERNATE,
     DOCKER,
     CAMUNDA,
-    KAFKA
+    KAFKA,
+    REST,
+    MICROSERVICES,
+    SPRING_SECURITY,
+    JPA,
+    DATABASE,
+    DESIGN_PATTERNS,
+    SYSTEM_DESIGN,
+    TESTING,
+    GIT,
+    CI_CD,
+    CLOUD
 }

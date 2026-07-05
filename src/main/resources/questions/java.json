@@ -1,0 +1,35 @@
+[
+  {
+    "title": "What is JVM?",
+    "question": "Explain what the Java Virtual Machine is.",
+    "answer": "The JVM (Java Virtual Machine) executes Java bytecode and provides platform independence by allowing Java applications to run on any operating system that has a compatible JVM installed.",
+    "exampleCode": "javac Main.java\njava Main",
+    "commonMistakes": "Confusing JVM with JDK or JRE.",
+    "followUpQuestions": "What is JDK? What is JRE? Why is Java platform independent?",
+    "category": "JAVA",
+    "difficulty": "EASY",
+    "published": true
+  },
+  {
+    "title": "What is JDK?",
+    "question": "Explain the Java Development Kit.",
+    "answer": "The JDK is a software development kit that contains the JRE, compiler, debugger and development tools required to build Java applications.",
+    "exampleCode": "javac Main.java",
+    "commonMistakes": "Thinking JDK only contains the compiler.",
+    "followUpQuestions": "Difference between JDK and JRE?",
+    "category": "JAVA",
+    "difficulty": "EASY",
+    "published": true
+  },
+  {
+    "title": "What is the difference between == and equals()?",
+    "question": "Explain the difference between == and equals() in Java.",
+    "answer": "The == operator compares references for objects, while equals() compares object content if it is overridden.",
+    "exampleCode": "String a = \"Java\";\nString b = new String(\"Java\");\na == b;\na.equals(b);",
+    "commonMistakes": "Using == for String comparison.",
+    "followUpQuestions": "How is equals() implemented in String?",
+    "category": "JAVA",
+    "difficulty": "MEDIUM",
+    "published": true
+  }
+]
