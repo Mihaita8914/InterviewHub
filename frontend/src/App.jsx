@@ -32,6 +32,7 @@ function App() {
                     path="/admin"
                     element={<Admin />}
                 />
+
 		<Route
     		    path="/questions/:id"
                     element={<QuestionDetails />}

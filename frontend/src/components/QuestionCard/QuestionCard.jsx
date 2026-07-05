@@ -1,7 +1,14 @@
-function QuestionCard({ question }) {
-    return (
-        <div className="card mb-3 shadow-sm">
+import { useNavigate } from "react-router-dom";
 
+function QuestionCard({ question }) {
+    const navigate = useNavigate();
+
+    return (
+        <div
+            className="card mb-3 shadow-sm"
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate(`/questions/${question.id}`)}
+        >
             <div className="card-body">
 
                 <h3 className="card-title">
@@ -19,15 +26,12 @@ function QuestionCard({ question }) {
                 <hr />
 
                 <h5>Question</h5>
-
                 <p>{question.question}</p>
 
                 <h5>Answer</h5>
-
                 <p>{question.answer}</p>
 
             </div>
-
         </div>
     );
 }

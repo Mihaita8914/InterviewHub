@@ -22,6 +22,7 @@ function QuestionDetails() {
 
     return (
         <div className="container mt-4">
+
             <h1>{question.title}</h1>
 
             <span className="badge bg-primary me-2">
@@ -39,6 +40,7 @@ function QuestionDetails() {
 
             <h4>Answer</h4>
             <p>{question.answer}</p>
+
         </div>
     );
 }
