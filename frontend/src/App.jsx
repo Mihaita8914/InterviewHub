@@ -6,6 +6,7 @@ import Home from "./pages/Home/Home";
 import Questions from "./pages/Questions/Questions";
 import Login from "./pages/Login/Login";
 import Admin from "./pages/Admin/Admin";
+import QuestionDetails from "./pages/QuestionDetails/QuestionDetails";
 
 function App() {
     return (
@@ -30,6 +31,10 @@ function App() {
                 <Route
                     path="/admin"
                     element={<Admin />}
+                />
+		<Route
+    		    path="/questions/:id"
+                    element={<QuestionDetails />}
                 />
 
             </Routes>

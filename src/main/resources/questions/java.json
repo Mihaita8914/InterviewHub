@@ -31,5 +31,40 @@
     "category": "JAVA",
     "difficulty": "MEDIUM",
     "published": true
+  },
+
+  {
+    "title": "What is the difference between == and equals()?",
+    "question": "Explain the difference between == and equals() in Java.",
+    "answer": "The == operator compares references for objects, while equals() compares object content if it is overridden.",
+    "exampleCode": "String a = \"Java\";\nString b = new String(\"Java\");\na == b;\na.equals(b);",
+    "commonMistakes": "Using == for String comparison.",
+    "followUpQuestions": "How is equals() implemented in String?",
+    "category": "JAVA",
+    "difficulty": "MEDIUM",
+    "published": true
+  },
+
+  {
+    "title": "What is the difference between == and equals()?",
+    "question": "Explain the difference between == and equals() in Java.",
+    "answer": "The == operator compares references for objects, while equals() compares object content if it is overridden.",
+    "exampleCode": "String a = \"Java\";\nString b = new String(\"Java\");\na == b;\na.equals(b);",
+    "commonMistakes": "Using == for String comparison.",
+    "followUpQuestions": "How is equals() implemented in String?",
+    "category": "JAVA",
+    "difficulty": "MEDIUM",
+    "published": true
+  },
+  {
+    "title": "What is the difference between == and equals()?",
+    "question": "Explain the difference between == and equals() in Java.",
+    "answer": "The == operator compares references for objects, while equals() compares object content if it is overridden.",
+    "exampleCode": "String a = \"Java\";\nString b = new String(\"Java\");\na == b;\na.equals(b);",
+    "commonMistakes": "Using == for String comparison.",
+    "followUpQuestions": "How is equals() implemented in String?",
+    "category": "JAVA",
+    "difficulty": "MEDIUM",
+    "published": true
   }
 ]
