@@ -1,150 +1,204 @@
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 function Pricing() {
     const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
 
-    const plans = [
-        {
-            name: "Free",
-            price: "€0",
-            description: "Pentru cei care vor să înceapă pregătirea.",
-            features: [
-                "Acces la întrebările gratuite",
-                "Search și filtre",
-                "Java Core",
-                "Explicații de bază"
-            ],
-            buttonText: "Start Free",
-            buttonClass: "btn-outline-primary",
-            action: () => navigate("/questions"),
-            recommended: false
-        },
+    const freeFeatures = [
+        "Java interview questions and detailed answers",
+        "Search by keyword",
+        "Category and difficulty filters",
+        "Save favorite questions",
+        "Personalized user dashboard",
+        "Responsive access from desktop and mobile"
+    ];
+
+    const futurePlans = [
         {
             name: "Pro",
-            price: "€9.99",
-            description: "Pentru pregătire serioasă și progres rapid.",
+            description:
+                "A structured preparation experience for serious candidates.",
             features: [
-                "Acces nelimitat la întrebări",
-                "Conținut premium",
-                "Mock interviews",
                 "Progress tracking",
-                "Favorites și notes",
-                "Roadmaps de învățare"
-            ],
-            buttonText: "Upgrade to Pro",
-            buttonClass: "btn-primary",
-            action: () => navigate("/login"),
-            recommended: true
+                "Personal notes",
+                "Structured learning paths",
+                "Advanced practice statistics"
+            ]
         },
         {
             name: "Premium",
-            price: "€19.99",
-            description: "Pentru candidații care vor suport complet.",
+            description:
+                "Advanced guidance and personalized interview preparation.",
             features: [
-                "Tot ce include Pro",
-                "AI Interview Coach",
-                "Feedback pe răspunsuri",
-                "Simulări nelimitate",
-                "Plan personalizat de învățare",
-                "Priority support"
-            ],
-            buttonText: "Choose Premium",
-            buttonClass: "btn-dark",
-            action: () => navigate("/login"),
-            recommended: false
+                "AI answer feedback",
+                "Mock interview sessions",
+                "Personalized learning plan",
+                "Advanced interview insights"
+            ]
         }
     ];
 
-    const comparisonRows = [
-        ["Interview questions", "Limited", "Unlimited", "Unlimited"],
-        ["Search and filters", "Yes", "Yes", "Yes"],
-        ["Premium explanations", "No", "Yes", "Yes"],
-        ["Mock interviews", "No", "Yes", "Unlimited"],
-        ["Progress tracking", "No", "Yes", "Yes"],
-        ["Favorites and notes", "No", "Yes", "Yes"],
-        ["AI feedback", "No", "No", "Yes"],
-        ["Personal roadmap", "No", "No", "Yes"]
-    ];
+    function handleStart() {
+        navigate(
+            isAuthenticated
+                ? "/dashboard"
+                : "/register"
+        );
+    }
 
     return (
         <main>
             <section className="bg-dark text-white py-5">
                 <div className="container py-5 text-center">
-                    <span className="badge bg-primary px-3 py-2 mb-3">
-                        SIMPLE PRICING
+                    <span className="badge text-bg-primary px-3 py-2 mb-3">
+                        FREE PUBLIC BETA
                     </span>
 
                     <h1 className="display-4 fw-bold">
-                        Choose the plan that gets you hired
+                        Prepare smarter for your next Java interview
                     </h1>
 
                     <p
-                        className="lead text-light mx-auto mt-3"
+                        className="lead text-white-50 mx-auto mt-3"
                         style={{ maxWidth: "720px" }}
                     >
-                        Start free, practice real interview questions and upgrade
-                        when you are ready for advanced preparation.
+                        InterviewHub is currently free during the public
+                        beta. Practice real questions, save favorites and
+                        organize your preparation.
+                    </p>
+
+                    <button
+                        type="button"
+                        className="btn btn-primary btn-lg px-5 mt-3"
+                        onClick={handleStart}
+                    >
+                        {isAuthenticated
+                            ? "Open Dashboard"
+                            : "Start Free Beta"}
+                    </button>
+
+                    <p className="small text-white-50 mt-3 mb-0">
+                        No credit card required.
                     </p>
                 </div>
             </section>
 
-            <section className="py-5 bg-light">
+            <section className="bg-light py-5">
                 <div className="container py-4">
+                    <div
+                        className="card border-primary border-2 shadow-sm mx-auto"
+                        style={{ maxWidth: "900px" }}
+                    >
+                        <div className="card-header bg-primary text-white text-center fw-semibold py-3">
+                            Everything currently available
+                        </div>
+
+                        <div className="card-body p-4 p-md-5">
+                            <div className="row align-items-center g-4">
+                                <div className="col-12 col-lg-4 text-center text-lg-start">
+                                    <h2 className="display-6 fw-bold">
+                                        Free Beta
+                                    </h2>
+
+                                    <div className="my-3">
+                                        <span className="display-4 fw-bold">
+                                            €0
+                                        </span>
+                                    </div>
+
+                                    <p className="text-secondary">
+                                        Full access to the current V1
+                                        functionality during the public beta.
+                                    </p>
+                                </div>
+
+                                <div className="col-12 col-lg-8">
+                                    <div className="row g-3">
+                                        {freeFeatures.map(feature => (
+                                            <div
+                                                className="col-12 col-md-6"
+                                                key={feature}
+                                            >
+                                                <div className="d-flex gap-2">
+                                                    <span className="text-success fw-bold">
+                                                        ✓
+                                                    </span>
+
+                                                    <span>{feature}</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <button
+                                        type="button"
+                                        className="btn btn-primary w-100 mt-4"
+                                        onClick={handleStart}
+                                    >
+                                        {isAuthenticated
+                                            ? "Continue Learning"
+                                            : "Create Free Account"}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section className="py-5">
+                <div className="container py-4">
+                    <div className="text-center mb-5">
+                        <span className="badge text-bg-secondary mb-3">
+                            PRODUCT ROADMAP
+                        </span>
+
+                        <h2 className="fw-bold">
+                            More features are planned
+                        </h2>
+
+                        <p className="text-secondary">
+                            These plans are not available for purchase yet.
+                        </p>
+                    </div>
+
                     <div className="row g-4 justify-content-center">
-                        {plans.map(plan => (
-                            <div className="col-lg-4" key={plan.name}>
-                                <div
-                                    className={`card h-100 shadow-sm ${
-                                        plan.recommended
-                                            ? "border-primary border-2"
-                                            : "border-0"
-                                    }`}
-                                >
-                                    {plan.recommended && (
-                                        <div className="card-header bg-primary text-white text-center fw-semibold">
-                                            Most Popular
+                        {futurePlans.map(plan => (
+                            <div
+                                className="col-12 col-lg-5"
+                                key={plan.name}
+                            >
+                                <div className="card h-100 border-0 shadow-sm">
+                                    <div className="card-body p-4">
+                                        <div className="d-flex justify-content-between align-items-center mb-3">
+                                            <h3 className="h3 fw-bold mb-0">
+                                                {plan.name}
+                                            </h3>
+
+                                            <span className="badge text-bg-warning">
+                                                Coming later
+                                            </span>
                                         </div>
-                                    )}
 
-                                    <div className="card-body p-4 d-flex flex-column">
-                                        <h2 className="h3">{plan.name}</h2>
-
-                                        <p className="text-muted">
+                                        <p className="text-secondary">
                                             {plan.description}
                                         </p>
 
-                                        <div className="my-4">
-                                            <span className="display-5 fw-bold">
-                                                {plan.price}
-                                            </span>
-
-                                            <span className="text-muted">
-                                                /month
-                                            </span>
-                                        </div>
-
-                                        <ul className="list-unstyled flex-grow-1">
+                                        <ul className="list-unstyled mb-0">
                                             {plan.features.map(feature => (
                                                 <li
                                                     className="mb-3"
                                                     key={feature}
                                                 >
-                                                    <span className="text-success me-2">
-                                                        ✓
+                                                    <span className="text-primary me-2">
+                                                        ◦
                                                     </span>
 
                                                     {feature}
                                                 </li>
                                             ))}
                                         </ul>
-
-                                        <button
-                                            type="button"
-                                            className={`btn ${plan.buttonClass} w-100 mt-3`}
-                                            onClick={plan.action}
-                                        >
-                                            {plan.buttonText}
-                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -153,56 +207,7 @@ function Pricing() {
                 </div>
             </section>
 
-            <section className="py-5">
-                <div className="container py-4">
-                    <div className="text-center mb-5">
-                        <h2 className="fw-bold">
-                            Compare all features
-                        </h2>
-
-                        <p className="text-muted">
-                            Vezi exact ce primești în fiecare abonament.
-                        </p>
-                    </div>
-
-                    <div className="table-responsive shadow-sm rounded">
-                        <table className="table table-bordered align-middle mb-0">
-                            <thead className="table-dark">
-                                <tr>
-                                    <th>Feature</th>
-                                    <th className="text-center">Free</th>
-                                    <th className="text-center">Pro</th>
-                                    <th className="text-center">Premium</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                {comparisonRows.map(row => (
-                                    <tr key={row[0]}>
-                                        <td className="fw-semibold">
-                                            {row[0]}
-                                        </td>
-
-                                        <td className="text-center">
-                                            {row[1]}
-                                        </td>
-
-                                        <td className="text-center">
-                                            {row[2]}
-                                        </td>
-
-                                        <td className="text-center">
-                                            {row[3]}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <section className="py-5 bg-light">
+            <section className="bg-light py-5">
                 <div className="container py-4">
                     <div className="text-center mb-5">
                         <h2 className="fw-bold">
@@ -221,20 +226,21 @@ function Pricing() {
                                     className="accordion-button"
                                     type="button"
                                     data-bs-toggle="collapse"
-                                    data-bs-target="#faqOne"
+                                    data-bs-target="#faqBeta"
                                 >
-                                    Pot începe gratuit?
+                                    Is InterviewHub currently free?
                                 </button>
                             </h2>
 
                             <div
-                                id="faqOne"
+                                id="faqBeta"
                                 className="accordion-collapse collapse show"
                                 data-bs-parent="#pricingFaq"
                             >
                                 <div className="accordion-body">
-                                    Da. Planul Free îți permite să testezi aplicația
-                                    și să studiezi o selecție de întrebări.
+                                    Yes. All current V1 features are
+                                    available free of charge during the
+                                    public beta.
                                 </div>
                             </div>
                         </div>
@@ -245,20 +251,20 @@ function Pricing() {
                                     className="accordion-button collapsed"
                                     type="button"
                                     data-bs-toggle="collapse"
-                                    data-bs-target="#faqTwo"
+                                    data-bs-target="#faqPayment"
                                 >
-                                    Pot anula abonamentul?
+                                    Do I need to provide payment details?
                                 </button>
                             </h2>
 
                             <div
-                                id="faqTwo"
+                                id="faqPayment"
                                 className="accordion-collapse collapse"
                                 data-bs-parent="#pricingFaq"
                             >
                                 <div className="accordion-body">
-                                    Da. Abonamentul va putea fi anulat oricând,
-                                    fără perioadă minimă contractuală.
+                                    No. InterviewHub does not currently
+                                    request payment or card information.
                                 </div>
                             </div>
                         </div>
@@ -269,21 +275,21 @@ function Pricing() {
                                     className="accordion-button collapsed"
                                     type="button"
                                     data-bs-toggle="collapse"
-                                    data-bs-target="#faqThree"
+                                    data-bs-target="#faqFuture"
                                 >
-                                    Care este diferența dintre Pro și Premium?
+                                    Will paid plans be introduced later?
                                 </button>
                             </h2>
 
                             <div
-                                id="faqThree"
+                                id="faqFuture"
                                 className="accordion-collapse collapse"
                                 data-bs-parent="#pricingFaq"
                             >
                                 <div className="accordion-body">
-                                    Pro oferă acces la conținutul și funcțiile
-                                    avansate, iar Premium va include AI Coach,
-                                    feedback și planuri personalizate.
+                                    Potential paid plans will only be
+                                    introduced after the planned features
+                                    are implemented and clearly described.
                                 </div>
                             </div>
                         </div>
@@ -294,19 +300,22 @@ function Pricing() {
             <section className="bg-primary text-white py-5">
                 <div className="container text-center py-4">
                     <h2 className="display-6 fw-bold">
-                        Start preparing for your next interview
+                        Start preparing today
                     </h2>
 
                     <p className="lead">
-                        Începe gratuit și fă upgrade când ai nevoie de mai mult.
+                        Build your interview preparation list and practice
+                        from any device.
                     </p>
 
                     <button
                         type="button"
                         className="btn btn-light btn-lg px-5"
-                        onClick={() => navigate("/questions")}
+                        onClick={handleStart}
                     >
-                        Start Free
+                        {isAuthenticated
+                            ? "Go to Dashboard"
+                            : "Join the Free Beta"}
                     </button>
                 </div>
             </section>

@@ -13,6 +13,7 @@ import Pricing from "./pages/Pricing/Pricing";
 import Register from "./pages/Register/Register";
 import Favorites from "./pages/Favorites/Favorites";
 import Dashboard from "./pages/Dashboard/Dashboard";
+import NotFound from "./pages/NotFound/NotFound";
 
 function App() {
     return (
@@ -37,6 +38,8 @@ function App() {
                 <Route path="/login" element={<Login />} />
 
                 <Route path="/register" element={<Register />} />
+
+                <Route path="*" element={<NotFound />} />
 
                 <Route
                     path="/admin"
