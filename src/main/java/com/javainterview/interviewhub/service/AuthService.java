@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.javainterview.interviewhub.exception.EmailAlreadyExistsException;
 import com.javainterview.interviewhub.exception.UsernameAlreadyExistsException;
+import com.javainterview.interviewhub.exception.InvalidCredentialsException;
 
 @Service
 @RequiredArgsConstructor
@@ -55,10 +56,10 @@ public class AuthService {
 
     public AuthResponse login(LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("Invalid email or password"));
+                .orElseThrow(InvalidCredentialsException::new);
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid email or password");
+            throw new InvalidCredentialsException();
         }
 
         return AuthResponse.builder()
