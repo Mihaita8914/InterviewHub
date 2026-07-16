@@ -78,7 +78,14 @@ function Navbar() {
                         >
                             Questions
                         </NavLink>
-
+                        {isAuthenticated && (
+                            <NavLink
+                                className={getNavLinkClass}
+                                to="/favorites"
+                            >
+                                Favorites
+                            </NavLink>
+                        )}
                         <NavLink
                             className={getNavLinkClass}
                             to="/pricing"

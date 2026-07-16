@@ -11,6 +11,7 @@ import QuestionDetails from "./pages/QuestionDetails/QuestionDetails";
 import QuestionForm from "./pages/Admin/QuestionForm";
 import Pricing from "./pages/Pricing/Pricing";
 import Register from "./pages/Register/Register";
+import Favorites from "./pages/Favorites/Favorites";
 
 function App() {
     return (
@@ -23,6 +24,8 @@ function App() {
                 <Route path="/" element={<Home />} />
 
                 <Route path="/questions" element={<Questions />} />
+
+                <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>}/>
 
                 <Route path="/pricing" element={<Pricing />} />
 
