@@ -6,6 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -65,5 +66,37 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(response);
+    }
+
+    @ExceptionHandler(FavoriteAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleFavoriteAlreadyExists(
+            FavoriteAlreadyExistsException ex
+    ) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.CONFLICT.value())
+                .error(ex.getMessage())
+                .validationErrors(null)
+                .build();
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(FavoriteNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleFavoriteNotFound(
+            FavoriteNotFoundException ex
+    ) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.NOT_FOUND.value())
+                .error(ex.getMessage())
+                .validationErrors(null)
+                .build();
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(errorResponse);
     }
 }
