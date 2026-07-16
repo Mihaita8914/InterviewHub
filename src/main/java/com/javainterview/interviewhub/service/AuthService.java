@@ -11,6 +11,8 @@ import com.javainterview.interviewhub.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.javainterview.interviewhub.exception.EmailAlreadyExistsException;
+import com.javainterview.interviewhub.exception.UsernameAlreadyExistsException;
 
 @Service
 @RequiredArgsConstructor
@@ -22,11 +24,15 @@ public class AuthService {
 
     public AuthResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already exists");
+            throw new EmailAlreadyExistsException(
+                    "Email address is already in use."
+            );
         }
 
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new RuntimeException("Username already exists");
+            throw new UsernameAlreadyExistsException(
+                    "Username is already in use."
+            );
         }
 
         User user = User.builder()

@@ -48,4 +48,22 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(response);
     }
+    @ExceptionHandler({
+            EmailAlreadyExistsException.class,
+            UsernameAlreadyExistsException.class
+    })
+    public ResponseEntity<ErrorResponse> handleUserAlreadyExists(
+            RuntimeException exception
+    ) {
+        ErrorResponse response = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.CONFLICT.value())
+                .error(exception.getMessage())
+                .validationErrors(null)
+                .build();
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(response);
+    }
 }
