@@ -24,3 +24,17 @@ export async function getQuestionById(id) {
     const response = await axiosClient.get(`/questions/${id}`);
     return response.data;
 }
+
+export async function deleteQuestion(id) {
+    await axiosClient.delete(`/questions/${id}`);
+}
+
+export async function createQuestion(question) {
+    const response = await axiosClient.post("/questions", question);
+    return response.data;
+}
+
+export async function updateQuestion(id, question) {
+    const response = await axiosClient.put(`/questions/${id}`, question);
+    return response.data;
+}

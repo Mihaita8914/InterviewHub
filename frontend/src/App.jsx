@@ -1,12 +1,15 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar/Navbar";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 import Home from "./pages/Home/Home";
 import Questions from "./pages/Questions/Questions";
 import Login from "./pages/Login/Login";
 import Admin from "./pages/Admin/Admin";
 import QuestionDetails from "./pages/QuestionDetails/QuestionDetails";
+import QuestionForm from "./pages/Admin/QuestionForm";
+import Pricing from "./pages/Pricing/Pricing";
 
 function App() {
     return (
@@ -18,24 +21,39 @@ function App() {
 
                 <Route path="/" element={<Home />} />
 
-                <Route
-                    path="/questions"
-                    element={<Questions />}
-                />
+                <Route path="/questions" element={<Questions />} />
 
-                <Route
-                    path="/login"
-                    element={<Login />}
-                />
+                <Route path="/pricing" element={<Pricing />} />
+
+                <Route path="/questions/:id" element={<QuestionDetails />} />
+
+                <Route path="/login" element={<Login />} />
 
                 <Route
                     path="/admin"
-                    element={<Admin />}
+                    element={
+                        <ProtectedRoute requiredRole="ADMIN">
+                            <Admin />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/admin/questions/new"
+                    element={
+                        <ProtectedRoute requiredRole="ADMIN">
+                            <QuestionForm />
+                        </ProtectedRoute>
+                    }
                 />
 
 		<Route
-    		    path="/questions/:id"
-                    element={<QuestionDetails />}
+    		    path="/admin/questions/:id/edit"
+                    element={
+                        <ProtectedRoute requiredRole="ADMIN">
+                            <QuestionForm />
+                        </ProtectedRoute>
+                   }
                 />
 
             </Routes>

@@ -31,17 +31,61 @@ public class QuestionService {
                 .toList();
     }
 
-    public QuestionResponse createQuestion(QuestionRequest request) {
-        Question question = questionMapper.toEntity(request);
-        Question savedQuestion = questionRepository.save(question);
-        return questionMapper.toResponse(savedQuestion);
+    public Page<QuestionResponse> getAllQuestionsPaged(
+            Pageable pageable
+    ) {
+        return questionRepository.findAll(pageable)
+                .map(questionMapper::toResponse);
     }
 
     public QuestionResponse getQuestionById(Long id) {
         Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new QuestionNotFoundException(id));
+                .orElseThrow(
+                        () -> new QuestionNotFoundException(id)
+                );
 
         return questionMapper.toResponse(question);
+    }
+
+    public QuestionResponse createQuestion(
+            QuestionRequest request
+    ) {
+        Question question = questionMapper.toEntity(request);
+
+        Question savedQuestion =
+                questionRepository.save(question);
+
+        return questionMapper.toResponse(savedQuestion);
+    }
+
+    public QuestionResponse updateQuestion(
+            Long id,
+            QuestionRequest request
+    ) {
+        Question question = questionRepository.findById(id)
+                .orElseThrow(
+                        () -> new QuestionNotFoundException(id)
+                );
+
+        question.setTitle(request.getTitle());
+        question.setQuestion(request.getQuestion());
+        question.setAnswer(request.getAnswer());
+        question.setCategory(request.getCategory());
+        question.setDifficulty(request.getDifficulty());
+        question.setExampleCode(request.getExampleCode());
+        question.setCommonMistakes(request.getCommonMistakes());
+        question.setFollowUpQuestions(
+                request.getFollowUpQuestions()
+        );
+
+        if (request.getPublished() != null) {
+            question.setPublished(request.getPublished());
+        }
+
+        Question updatedQuestion =
+                questionRepository.save(question);
+
+        return questionMapper.toResponse(updatedQuestion);
     }
 
     public void deleteQuestion(Long id) {
@@ -51,57 +95,43 @@ public class QuestionService {
 
         questionRepository.deleteById(id);
     }
-    public QuestionResponse updateQuestion(Long id, QuestionRequest request) {
-        Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new QuestionNotFoundException(id));
 
-        question.setTitle(request.getTitle());
-        question.setQuestion(request.getQuestion());
-        question.setAnswer(request.getAnswer());
-        question.setCategory(request.getCategory());
-        question.setDifficulty(request.getDifficulty());
-        question.setExampleCode(request.getExampleCode());
-        question.setCommonMistakes(request.getCommonMistakes());
-        question.setFollowUpQuestions(request.getFollowUpQuestions());
+    public List<QuestionResponse> searchQuestions(
+            String keyword
+    ) {
+        String normalizedKeyword =
+                keyword == null ? "" : keyword.trim();
 
-        if (request.getPublished() != null) {
-            question.setPublished(request.getPublished());
-        }
-
-        Question updatedQuestion = questionRepository.save(question);
-
-        return questionMapper.toResponse(updatedQuestion);
-    }
-
-    public List<QuestionResponse> searchQuestions(String keyword) {
         return questionRepository
-                .findByTitleContainingIgnoreCaseOrQuestionContainingIgnoreCaseOrAnswerContainingIgnoreCase(
-                        keyword,
-                        keyword,
-                        keyword
+                .findByTitleContainingIgnoreCaseOrQuestionContainingIgnoreCaseOrAnswerContainingIgnoreCaseOrExampleCodeContainingIgnoreCaseOrCommonMistakesContainingIgnoreCaseOrFollowUpQuestionsContainingIgnoreCase(
+                        normalizedKeyword,
+                        normalizedKeyword,
+                        normalizedKeyword,
+                        normalizedKeyword,
+                        normalizedKeyword,
+                        normalizedKeyword
                 )
                 .stream()
                 .map(questionMapper::toResponse)
                 .toList();
     }
 
-    public List<QuestionResponse> getQuestionsByCategory(Category category) {
+    public List<QuestionResponse> getQuestionsByCategory(
+            Category category
+    ) {
         return questionRepository.findByCategory(category)
                 .stream()
                 .map(questionMapper::toResponse)
                 .toList();
     }
 
-    public List<QuestionResponse> getQuestionsByDifficulty(Difficulty difficulty) {
+    public List<QuestionResponse> getQuestionsByDifficulty(
+            Difficulty difficulty
+    ) {
         return questionRepository.findByDifficulty(difficulty)
                 .stream()
                 .map(questionMapper::toResponse)
                 .toList();
-    }
-
-    public Page<QuestionResponse> getAllQuestionsPaged(Pageable pageable) {
-        return questionRepository.findAll(pageable)
-                .map(questionMapper::toResponse);
     }
 
     public List<QuestionResponse> getPublishedQuestions() {
@@ -110,9 +140,15 @@ public class QuestionService {
                 .map(questionMapper::toResponse)
                 .toList();
     }
+
     public QuestionResponse getRandomPublishedQuestion() {
-        Question question = questionRepository.findRandomPublishedQuestion()
-                .orElseThrow(() -> new RuntimeException("No published questions found"));
+        Question question =
+                questionRepository.findRandomPublishedQuestion()
+                        .orElseThrow(
+                                () -> new RuntimeException(
+                                        "No published questions found"
+                                )
+                        );
 
         return questionMapper.toResponse(question);
     }
@@ -124,13 +160,31 @@ public class QuestionService {
             String keyword,
             Pageable pageable
     ) {
-        Specification<Question> spec = Specification
-                .where(QuestionSpecification.hasCategory(category))
-                .and(QuestionSpecification.hasDifficulty(difficulty))
-                .and(QuestionSpecification.isPublished(published))
-                .and(QuestionSpecification.containsKeyword(keyword));
+        Specification<Question> specification =
+                Specification
+                        .where(
+                                QuestionSpecification.hasCategory(
+                                        category
+                                )
+                        )
+                        .and(
+                                QuestionSpecification.hasDifficulty(
+                                        difficulty
+                                )
+                        )
+                        .and(
+                                QuestionSpecification.isPublished(
+                                        published
+                                )
+                        )
+                        .and(
+                                QuestionSpecification.containsKeyword(
+                                        keyword
+                                )
+                        );
 
-        return questionRepository.findAll(spec, pageable)
+        return questionRepository
+                .findAll(specification, pageable)
                 .map(questionMapper::toResponse);
     }
 }

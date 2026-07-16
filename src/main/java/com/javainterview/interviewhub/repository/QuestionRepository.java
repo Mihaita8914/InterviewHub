@@ -12,12 +12,18 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-public interface QuestionRepository extends JpaRepository<Question, Long>, JpaSpecificationExecutor<Question> {
+public interface QuestionRepository extends
+        JpaRepository<Question, Long>,
+        JpaSpecificationExecutor<Question> {
 
-    List<Question> findByTitleContainingIgnoreCaseOrQuestionContainingIgnoreCaseOrAnswerContainingIgnoreCase(
+    List<Question>
+    findByTitleContainingIgnoreCaseOrQuestionContainingIgnoreCaseOrAnswerContainingIgnoreCaseOrExampleCodeContainingIgnoreCaseOrCommonMistakesContainingIgnoreCaseOrFollowUpQuestionsContainingIgnoreCase(
             String title,
             String question,
-            String answer
+            String answer,
+            String exampleCode,
+            String commonMistakes,
+            String followUpQuestions
     );
 
     List<Question> findByCategory(Category category);
@@ -26,7 +32,16 @@ public interface QuestionRepository extends JpaRepository<Question, Long>, JpaSp
 
     List<Question> findByPublishedTrue();
 
-    @Query(value = "SELECT * FROM questions WHERE published = true ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
+    @Query(
+            value = """
+                SELECT *
+                FROM questions
+                WHERE published = true
+                ORDER BY RANDOM()
+                LIMIT 1
+                """,
+            nativeQuery = true
+    )
     Optional<Question> findRandomPublishedQuestion();
 
     Page<Question> findByCategoryAndDifficultyAndPublished(

@@ -5,14 +5,21 @@ import com.javainterview.interviewhub.enums.Category;
 import com.javainterview.interviewhub.enums.Difficulty;
 import org.springframework.data.jpa.domain.Specification;
 
-public class QuestionSpecification {
+public final class QuestionSpecification {
+
+    private QuestionSpecification() {
+    }
 
     public static Specification<Question> hasCategory(Category category) {
         return (root, query, criteriaBuilder) -> {
             if (category == null) {
                 return criteriaBuilder.conjunction();
             }
-            return criteriaBuilder.equal(root.get("category"), category);
+
+            return criteriaBuilder.equal(
+                    root.get("category"),
+                    category
+            );
         };
     }
 
@@ -21,7 +28,11 @@ public class QuestionSpecification {
             if (difficulty == null) {
                 return criteriaBuilder.conjunction();
             }
-            return criteriaBuilder.equal(root.get("difficulty"), difficulty);
+
+            return criteriaBuilder.equal(
+                    root.get("difficulty"),
+                    difficulty
+            );
         };
     }
 
@@ -30,7 +41,11 @@ public class QuestionSpecification {
             if (published == null) {
                 return criteriaBuilder.conjunction();
             }
-            return criteriaBuilder.equal(root.get("published"), published);
+
+            return criteriaBuilder.equal(
+                    root.get("published"),
+                    published
+            );
         };
     }
 
@@ -40,12 +55,34 @@ public class QuestionSpecification {
                 return criteriaBuilder.conjunction();
             }
 
-            String likePattern = "%" + keyword.toLowerCase() + "%";
+            String likePattern =
+                    "%" + keyword.trim().toLowerCase() + "%";
 
             return criteriaBuilder.or(
-                    criteriaBuilder.like(criteriaBuilder.lower(root.get("title")), likePattern),
-                    criteriaBuilder.like(criteriaBuilder.lower(root.get("question")), likePattern),
-                    criteriaBuilder.like(criteriaBuilder.lower(root.get("answer")), likePattern)
+                    criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("title")),
+                            likePattern
+                    ),
+                    criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("question")),
+                            likePattern
+                    ),
+                    criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("answer")),
+                            likePattern
+                    ),
+                    criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("exampleCode")),
+                            likePattern
+                    ),
+                    criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("commonMistakes")),
+                            likePattern
+                    ),
+                    criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("followUpQuestions")),
+                            likePattern
+                    )
             );
         };
     }
