@@ -1,259 +1,269 @@
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 function Home() {
     const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
+
+    const technologies = [
+        "Java",
+        "Spring Boot",
+        "SQL",
+        "Hibernate",
+        "Docker",
+        "Camunda",
+        "PostgreSQL",
+        "REST APIs"
+    ];
+
+    const benefits = [
+        {
+            number: "01",
+            title: "Real interview topics",
+            description:
+                "Practice Java, Spring Boot, SQL and backend questions organized by category and difficulty."
+        },
+        {
+            number: "02",
+            title: "Build your study list",
+            description:
+                "Save important questions to Favorites and return to them whenever you want to practice."
+        },
+        {
+            number: "03",
+            title: "Personal dashboard",
+            description:
+                "See your saved questions and receive a new practice suggestion from one central place."
+        }
+    ];
+
+    const steps = [
+        {
+            number: "1",
+            title: "Create your account",
+            description:
+                "Join the public beta for free. No payment information is required."
+        },
+        {
+            number: "2",
+            title: "Choose a topic",
+            description:
+                "Search and filter questions by category and difficulty."
+        },
+        {
+            number: "3",
+            title: "Save important questions",
+            description:
+                "Create a personal list with the questions you want to review."
+        },
+        {
+            number: "4",
+            title: "Continue from Dashboard",
+            description:
+                "Return to your saved questions and continue practicing."
+        }
+    ];
+
+    function handlePrimaryAction() {
+        navigate(
+            isAuthenticated
+                ? "/dashboard"
+                : "/register"
+        );
+    }
 
     return (
         <main>
-
-            {/* HERO */}
             <section className="bg-dark text-white py-5">
-                <div className="container py-5">
-                    <div className="row align-items-center">
-
-                        <div className="col-lg-7">
-                            <span className="badge bg-primary mb-3 px-3 py-2">
-                                Built for Java Developers
+                <div className="container py-4 py-md-5">
+                    <div className="row align-items-center g-5">
+                        <div className="col-12 col-lg-7">
+                            <span className="badge text-bg-primary px-3 py-2 mb-3">
+                                FREE PUBLIC BETA
                             </span>
 
                             <h1 className="display-3 fw-bold mb-4">
-                                Ace Your Next
-                                <span className="text-primary"> Java Interview</span>
+                                Ace your next{" "}
+                                <span className="text-primary">
+                                    Java interview
+                                </span>
                             </h1>
 
-                            <p className="lead text-light mb-4">
-                                Practice real interview questions for Java,
-                                Spring Boot, SQL, Hibernate, Docker and Camunda.
-                                Learn faster, gain confidence and get closer to
-                                your next job.
+                            <p className="lead text-white-50 mb-4">
+                                Practice real Java backend interview
+                                questions, save the important ones and
+                                organize your preparation from a personal
+                                dashboard.
                             </p>
 
-                            <div className="d-flex flex-wrap gap-3">
+                            <div className="d-flex flex-column flex-sm-row gap-3">
                                 <button
+                                    type="button"
                                     className="btn btn-primary btn-lg px-4"
-                                    onClick={() => navigate("/questions")}
+                                    onClick={handlePrimaryAction}
                                 >
-                                    Start Practicing Free
+                                    {isAuthenticated
+                                        ? "Open Dashboard"
+                                        : "Create Free Account"}
                                 </button>
 
                                 <button
                                     type="button"
                                     className="btn btn-outline-light btn-lg px-4"
-                                    onClick={() => navigate("/pricing")}
+                                    onClick={() =>
+                                        navigate("/questions")
+                                    }
                                 >
-                                    View Plans
+                                    Explore Questions
                                 </button>
                             </div>
 
-                            <div className="mt-4 text-light">
-                                <span className="me-3">
-                                    ✓ No credit card required
-                                </span>
-
-                                <span>
-                                    ✓ Start in seconds
-                                </span>
+                            <div className="d-flex flex-column flex-sm-row gap-2 gap-sm-4 mt-4 text-white-50">
+                                <span>✓ No credit card required</span>
+                                <span>✓ Works on mobile and desktop</span>
                             </div>
                         </div>
 
-                        <div className="col-lg-5 mt-5 mt-lg-0">
+                        <div className="col-12 col-lg-5">
                             <div className="card border-0 shadow-lg">
-                                <div className="card-body p-4 text-dark">
-
-                                    <div className="d-flex justify-content-between align-items-center mb-4">
+                                <div className="card-body p-4 p-md-5 text-dark">
+                                    <div className="d-flex justify-content-between align-items-start gap-3 mb-4">
                                         <div>
-                                            <small className="text-muted">
-                                                Interview progress
+                                            <small className="text-secondary">
+                                                Your preparation workspace
                                             </small>
 
-                                            <h4 className="mb-0">
-                                                Your Learning Dashboard
-                                            </h4>
+                                            <h2 className="h4 fw-bold mt-1 mb-0">
+                                                InterviewHub Dashboard
+                                            </h2>
                                         </div>
 
-                                        <span className="badge bg-success">
-                                            Active
+                                        <span className="badge text-bg-success">
+                                            Available
                                         </span>
                                     </div>
 
-                                    <div className="mb-4">
-                                        <div className="d-flex justify-content-between mb-2">
-                                            <span>Java Core</span>
-                                            <strong>82%</strong>
+                                    <div className="list-group list-group-flush">
+                                        <div className="list-group-item px-0 py-3">
+                                            <strong className="d-block">
+                                                Browse interview questions
+                                            </strong>
+
+                                            <small className="text-secondary">
+                                                Search by topic and difficulty
+                                            </small>
                                         </div>
 
-                                        <div className="progress">
-                                            <div
-                                                className="progress-bar"
-                                                style={{ width: "82%" }}
-                                            />
-                                        </div>
-                                    </div>
+                                        <div className="list-group-item px-0 py-3">
+                                            <strong className="d-block">
+                                                Save your favorites
+                                            </strong>
 
-                                    <div className="mb-4">
-                                        <div className="d-flex justify-content-between mb-2">
-                                            <span>Spring Boot</span>
-                                            <strong>64%</strong>
+                                            <small className="text-secondary">
+                                                Build a personal practice list
+                                            </small>
                                         </div>
 
-                                        <div className="progress">
-                                            <div
-                                                className="progress-bar"
-                                                style={{ width: "64%" }}
-                                            />
-                                        </div>
-                                    </div>
+                                        <div className="list-group-item px-0 py-3">
+                                            <strong className="d-block">
+                                                Continue practicing
+                                            </strong>
 
-                                    <div className="mb-4">
-                                        <div className="d-flex justify-content-between mb-2">
-                                            <span>SQL</span>
-                                            <strong>48%</strong>
-                                        </div>
-
-                                        <div className="progress">
-                                            <div
-                                                className="progress-bar"
-                                                style={{ width: "48%" }}
-                                            />
+                                            <small className="text-secondary">
+                                                Receive a random question
+                                                suggestion
+                                            </small>
                                         </div>
                                     </div>
 
                                     <button
-                                        className="btn btn-dark w-100"
-                                        onClick={() => navigate("/questions")}
+                                        type="button"
+                                        className="btn btn-dark w-100 mt-4"
+                                        onClick={handlePrimaryAction}
                                     >
-                                        Continue Learning
+                                        {isAuthenticated
+                                            ? "Continue Learning"
+                                            : "Start Free"}
                                     </button>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </section>
 
-            {/* BENEFITS */}
-            <section className="py-5 bg-light">
+            <section className="bg-light py-5">
                 <div className="container py-4">
-
                     <div className="text-center mb-5">
                         <span className="text-primary fw-bold">
-                            EVERYTHING YOU NEED
+                            CURRENT V1 FEATURES
                         </span>
 
                         <h2 className="display-6 fw-bold mt-2">
-                            Prepare smarter, not harder
+                            Everything you need to start preparing
                         </h2>
 
-                        <p className="text-muted mx-auto" style={{ maxWidth: "700px" }}>
-                            InterviewHub helps you focus on the topics that actually
-                            matter in real Java interviews.
+                        <p
+                            className="text-secondary mx-auto"
+                            style={{ maxWidth: "700px" }}
+                        >
+                            Focus on useful interview content and keep
+                            your preparation organized.
                         </p>
                     </div>
 
                     <div className="row g-4">
+                        {benefits.map(benefit => (
+                            <div
+                                className="col-12 col-md-4"
+                                key={benefit.number}
+                            >
+                                <div className="card h-100 border-0 shadow-sm">
+                                    <div className="card-body p-4">
+                                        <span className="badge text-bg-primary mb-3">
+                                            {benefit.number}
+                                        </span>
 
-                        <div className="col-md-4">
-                            <div className="card h-100 border-0 shadow-sm">
-                                <div className="card-body p-4">
-                                    <div className="fs-1 mb-3">
-                                        💻
+                                        <h3 className="h4 fw-bold">
+                                            {benefit.title}
+                                        </h3>
+
+                                        <p className="text-secondary mb-0">
+                                            {benefit.description}
+                                        </p>
                                     </div>
-
-                                    <h3 className="h4">
-                                        Real Interview Questions
-                                    </h3>
-
-                                    <p className="text-muted mb-0">
-                                        Practice questions inspired by real
-                                        technical interviews across Java,
-                                        Spring Boot, databases and backend systems.
-                                    </p>
                                 </div>
                             </div>
-                        </div>
-
-                        <div className="col-md-4">
-                            <div className="card h-100 border-0 shadow-sm">
-                                <div className="card-body p-4">
-                                    <div className="fs-1 mb-3">
-                                        🎯
-                                    </div>
-
-                                    <h3 className="h4">
-                                        Focused Learning
-                                    </h3>
-
-                                    <p className="text-muted mb-0">
-                                        Search and filter questions by category
-                                        and difficulty so you can practice exactly
-                                        what you need.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="col-md-4">
-                            <div className="card h-100 border-0 shadow-sm">
-                                <div className="card-body p-4">
-                                    <div className="fs-1 mb-3">
-                                        🚀
-                                    </div>
-
-                                    <h3 className="h4">
-                                        Faster Progress
-                                    </h3>
-
-                                    <p className="text-muted mb-0">
-                                        Build confidence step by step and prepare
-                                        for junior, mid-level and senior backend
-                                        interviews.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
+                        ))}
                     </div>
                 </div>
             </section>
 
-            {/* TECHNOLOGIES */}
             <section className="py-5">
                 <div className="container py-4 text-center">
-
                     <h2 className="fw-bold mb-3">
-                        Master the technologies companies ask for
+                        Practice the technologies companies ask about
                     </h2>
 
-                    <p className="text-muted mb-4">
-                        Structured preparation for the most important backend topics.
+                    <p className="text-secondary mb-4">
+                        Structured preparation for important Java backend
+                        topics.
                     </p>
 
                     <div className="d-flex flex-wrap justify-content-center gap-3">
-                        {[
-                            "Java",
-                            "Spring Boot",
-                            "SQL",
-                            "Hibernate",
-                            "Docker",
-                            "Camunda",
-                            "PostgreSQL",
-                            "REST APIs"
-                        ].map(technology => (
+                        {technologies.map(technology => (
                             <span
                                 key={technology}
-                                className="badge rounded-pill bg-dark fs-6 px-4 py-3"
+                                className="badge rounded-pill text-bg-dark fs-6 px-4 py-3"
                             >
                                 {technology}
                             </span>
                         ))}
                     </div>
-
                 </div>
             </section>
 
-            {/* HOW IT WORKS */}
-            <section className="py-5 bg-light">
+            <section className="bg-light py-5">
                 <div className="container py-4">
                     <div className="text-center mb-5">
                         <span className="text-primary fw-bold">
@@ -261,85 +271,72 @@ function Home() {
                         </span>
 
                         <h2 className="display-6 fw-bold mt-2">
-                            Four steps to a better interview
+                            Start preparing in four simple steps
                         </h2>
                     </div>
 
-                    <div className="row g-4 text-center">
-                        {[
-                            ["1", "Choose a topic", "Select Java, Spring, SQL or another backend topic."],
-                            ["2", "Practice questions", "Study real questions grouped by difficulty."],
-                            ["3", "Learn the answer", "Understand the explanation, examples and common mistakes."],
-                            ["4", "Build confidence", "Track your preparation and get ready for the real interview."]
-                        ].map(([number, title, text]) => (
-                            <div className="col-md-6 col-lg-3" key={number}>
-                                <div className="card border-0 shadow-sm h-100">
+                    <div className="row g-4">
+                        {steps.map(step => (
+                            <div
+                                className="col-12 col-md-6 col-lg-3"
+                                key={step.number}
+                            >
+                                <div className="card h-100 border-0 shadow-sm">
                                     <div className="card-body p-4">
                                         <div
-                                            className="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center fw-bold fs-4 mb-3"
+                                            className="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center fw-bold fs-5 mb-3"
                                             style={{
-                                                width: "55px",
-                                                height: "55px"
+                                                width: "48px",
+                                                height: "48px"
                                             }}
                                         >
-                                            {number}
+                                            {step.number}
                                         </div>
 
-                                        <h3 className="h5">
-                                            {title}
+                                        <h3 className="h5 fw-bold">
+                                            {step.title}
                                         </h3>
 
-                                        <p className="text-muted mb-0">
-                                            {text}
+                                        <p className="text-secondary mb-0">
+                                            {step.description}
                                         </p>
                                     </div>
                                 </div>
                             </div>
                         ))}
                     </div>
-
-                    <div className="text-center mt-5">
-                        <button
-                            type="button"
-                            className="btn btn-outline-primary btn-lg"
-                            onClick={() => navigate("/pricing")}
-                        >
-                            Compare Plans
-                        </button>
-                    </div>
                 </div>
             </section>
 
-            {/* FINAL CTA */}
             <section className="bg-primary text-white py-5">
-                <div className="container py-4 text-center">
-
+                <div className="container text-center py-4">
                     <h2 className="display-6 fw-bold">
-                        Ready to improve your next interview?
+                        Ready to start preparing?
                     </h2>
 
                     <p className="lead mb-4">
-                        Start practicing today and build the confidence
-                        you need to get the job.
+                        Join the free public beta and build your personal
+                        interview preparation list.
                     </p>
 
                     <button
+                        type="button"
                         className="btn btn-light btn-lg px-5"
-                        onClick={() => navigate("/questions")}
+                        onClick={handlePrimaryAction}
                     >
-                        Start Practicing
+                        {isAuthenticated
+                            ? "Go to Dashboard"
+                            : "Join Free Beta"}
                     </button>
-
                 </div>
             </section>
 
-            {/* FOOTER */}
             <footer className="bg-dark text-white py-4">
                 <div className="container">
-                    <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
-
+                    <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 text-center text-md-start">
                         <div>
                             <strong>InterviewHub</strong>
+
                             <span className="text-secondary ms-2">
                                 Java interview preparation
                             </span>
@@ -349,11 +346,9 @@ function Home() {
                             © {new Date().getFullYear()} InterviewHub.
                             All rights reserved.
                         </div>
-
                     </div>
                 </div>
             </footer>
-
         </main>
     );
 }

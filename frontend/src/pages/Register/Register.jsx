@@ -31,48 +31,71 @@ function Register() {
         event.preventDefault();
         setError("");
 
-        if (formData.password !== formData.confirmPassword) {
-            setError("Passwords do not match.");
+        const username = formData.username.trim();
+        const email = formData.email.trim();
+
+        if (!username) {
+            setError("Username is required.");
+            return;
+        }
+
+        if (!email) {
+            setError("Email is required.");
             return;
         }
 
         if (formData.password.length < 6) {
-            setError("Password must have at least 6 characters.");
+            setError(
+                "Password must have at least 6 characters."
+            );
             return;
         }
 
-        setLoading(true);
+        if (
+            formData.password !==
+            formData.confirmPassword
+        ) {
+            setError("Passwords do not match.");
+            return;
+        }
 
         try {
+            setLoading(true);
+
             const authResponse = await register({
-                username: formData.username.trim(),
-                email: formData.email.trim(),
+                username,
+                email,
                 password: formData.password
             });
 
             loginUser(authResponse);
-            navigate("/questions");
-        }  catch (requestError) {
-    const responseData = requestError.response?.data;
+            navigate("/dashboard");
+        } catch (requestError) {
+            const responseData =
+                requestError.response?.data;
 
-    if (responseData?.validationErrors) {
-        setError(
-            Object.values(
-                responseData.validationErrors
-            ).join(" ")
-        );
-    } else if (responseData?.error) {
-        setError(responseData.error);
-    } else if (responseData?.message) {
-        setError(responseData.message);
-    } else {
-        setError(
-            "Registration failed. Please try again."
-        );
-    }
-} finally {
-    setLoading(false);
-}
+            if (responseData?.validationErrors) {
+                setError(
+                    Object.values(
+                        responseData.validationErrors
+                    ).join(" ")
+                );
+            } else if (responseData?.error) {
+                setError(responseData.error);
+            } else if (responseData?.message) {
+                setError(responseData.message);
+            } else if (!requestError.response) {
+                setError(
+                    "The server cannot be reached. Please try again."
+                );
+            } else {
+                setError(
+                    "Registration failed. Please try again."
+                );
+            }
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
@@ -84,17 +107,17 @@ function Register() {
                 <div className="card border-0 shadow-sm">
                     <div className="card-body p-4 p-md-5">
                         <div className="text-center mb-4">
-                            <span className="badge bg-primary mb-3">
-                                START FREE
+                            <span className="badge text-bg-primary mb-3">
+                                FREE PUBLIC BETA
                             </span>
 
                             <h1 className="h2 fw-bold">
                                 Create your account
                             </h1>
 
-                            <p className="text-muted mb-0">
-                                Start practicing Java interview
-                                questions for free.
+                            <p className="text-secondary mb-0">
+                                Save questions and organize your Java
+                                interview preparation.
                             </p>
                         </div>
 
@@ -126,6 +149,7 @@ function Register() {
                                     minLength={3}
                                     maxLength={50}
                                     autoComplete="username"
+                                    disabled={loading}
                                     required
                                 />
                             </div>
@@ -146,6 +170,7 @@ function Register() {
                                     value={formData.email}
                                     onChange={handleChange}
                                     autoComplete="email"
+                                    disabled={loading}
                                     required
                                 />
                             </div>
@@ -167,6 +192,7 @@ function Register() {
                                     onChange={handleChange}
                                     minLength={6}
                                     autoComplete="new-password"
+                                    disabled={loading}
                                     required
                                 />
 
@@ -188,10 +214,13 @@ function Register() {
                                     name="confirmPassword"
                                     type="password"
                                     className="form-control"
-                                    value={formData.confirmPassword}
+                                    value={
+                                        formData.confirmPassword
+                                    }
                                     onChange={handleChange}
                                     minLength={6}
                                     autoComplete="new-password"
+                                    disabled={loading}
                                     required
                                 />
                             </div>
@@ -207,7 +236,7 @@ function Register() {
                             </button>
                         </form>
 
-                        <p className="text-center text-muted mt-4 mb-0">
+                        <p className="text-center text-secondary mt-4 mb-0">
                             Already have an account?{" "}
                             <Link to="/login">
                                 Login
