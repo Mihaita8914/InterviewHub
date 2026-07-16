@@ -86,14 +86,14 @@ function Navbar() {
                             Pricing
                         </NavLink>
 
-                        {isAuthenticated && (
+                        {/* {isAuthenticated && (
                             <NavLink
                                 className={getNavLinkClass}
                                 to="/dashboard"
                             >
                                 Dashboard
                             </NavLink>
-                        )}
+                        )} */}
 
                         {isAuthenticated && user?.role === "ADMIN" && (
                             <NavLink
@@ -119,7 +119,7 @@ function Navbar() {
 
                                 <Link
                                     className="btn btn-primary"
-                                    to="/questions"
+                                    to="/register"
                                 >
                                     Start Free
                                 </Link>

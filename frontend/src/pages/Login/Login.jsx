@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { login } from "../../api/AuthService";
 import { useAuth } from "../../context/AuthContext";
@@ -65,6 +65,13 @@ function Login() {
                 </button>
 
             </form>
+            <p className="text-center text-muted mt-4">
+                Don't have an account?{" "}
+                <Link to="/register">
+                Create one for free
+                </Link>
+            </p>
+            
         </div>
     );
 }

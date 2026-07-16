@@ -10,6 +10,7 @@ import Admin from "./pages/Admin/Admin";
 import QuestionDetails from "./pages/QuestionDetails/QuestionDetails";
 import QuestionForm from "./pages/Admin/QuestionForm";
 import Pricing from "./pages/Pricing/Pricing";
+import Register from "./pages/Register/Register";
 
 function App() {
     return (
@@ -28,6 +29,8 @@ function App() {
                 <Route path="/questions/:id" element={<QuestionDetails />} />
 
                 <Route path="/login" element={<Login />} />
+
+                <Route path="/register" element={<Register />} />
 
                 <Route
                     path="/admin"
