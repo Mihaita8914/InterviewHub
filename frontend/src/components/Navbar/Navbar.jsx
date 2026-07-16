@@ -93,14 +93,14 @@ function Navbar() {
                             Pricing
                         </NavLink>
 
-                        {/* {isAuthenticated && (
+                        {isAuthenticated && (
                             <NavLink
                                 className={getNavLinkClass}
                                 to="/dashboard"
                             >
                                 Dashboard
                             </NavLink>
-                        )} */}
+                        )}
 
                         {isAuthenticated && user?.role === "ADMIN" && (
                             <NavLink
@@ -139,7 +139,7 @@ function Navbar() {
                                     </small>
 
                                     <span className="fw-semibold">
-                                        {user?.name || user?.email || "User"}
+                                        {user?.username || user?.email || "User"}
                                     </span>
                                 </div>
 

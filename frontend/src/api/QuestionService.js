@@ -38,3 +38,11 @@ export async function updateQuestion(id, question) {
     const response = await axiosClient.put(`/questions/${id}`, question);
     return response.data;
 }
+
+export async function getRandomQuestion() {
+    const response = await axiosClient.get(
+        "/questions/random"
+    );
+
+    return response.data;
+}
