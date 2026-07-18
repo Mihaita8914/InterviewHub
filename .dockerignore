@@ -1,0 +1,15 @@
+.git
+.github
+.idea
+.vscode
+
+target
+frontend
+
+*.iml
+*.log
+
+.env
+.env.*
+
+src/main/resources/application.properties
