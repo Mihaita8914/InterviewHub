@@ -35,3 +35,13 @@ springdoc:
 
   swagger-ui:
     enabled: ${SWAGGER_ENABLED:true}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+  endpoint:
+    health:
+      show-details: never
