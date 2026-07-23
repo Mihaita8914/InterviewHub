@@ -104,12 +104,21 @@ function Login() {
                             </div>
 
                             <div className="mb-4">
+                            <div className="d-flex justify-content-between align-items-center">
                                 <label
                                     htmlFor="password"
                                     className="form-label"
                                 >
                                     Password
                                 </label>
+
+                                <Link
+                                    to="/forgot-password"
+                                    className="small text-decoration-none"
+                                >
+                                    Forgot password?
+                                </Link>
+                            </div>
 
                                 <input
                                     id="password"

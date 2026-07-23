@@ -14,6 +14,8 @@ import Register from "./pages/Register/Register";
 import Favorites from "./pages/Favorites/Favorites";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import NotFound from "./pages/NotFound/NotFound";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword/ResetPassword";
 
 function App() {
     return (
@@ -40,6 +42,10 @@ function App() {
                 <Route path="/register" element={<Register />} />
 
                 <Route path="*" element={<NotFound />} />
+
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                
+                <Route path="/reset-password" element={<ResetPassword />} />
 
                 <Route
                     path="/admin"

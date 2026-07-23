@@ -14,3 +14,18 @@ export async function getCurrentUser() {
     const response = await axiosClient.get("/auth/me");
     return response.data;
 }
+
+export function forgotPassword(email) {
+    return axiosClient
+        .post("/auth/forgot-password", { email })
+        .then(response => response.data);
+}
+
+export function resetPassword(token, newPassword) {
+    return axiosClient
+        .post("/auth/reset-password", {
+            token,
+            newPassword
+        })
+        .then(response => response.data);
+}
