@@ -19,6 +19,17 @@ spring:
     properties:
       hibernate:
         format_sql: false
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 server:
   port: ${PORT:8080}
@@ -45,3 +56,6 @@ management:
   endpoint:
     health:
       show-details: never
+
+app:
+  frontend-url: ${APP_FRONTEND_URL:http://localhost:5173}

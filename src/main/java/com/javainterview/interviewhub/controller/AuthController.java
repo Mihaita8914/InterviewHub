@@ -11,6 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import com.javainterview.interviewhub.dto.ForgotPasswordRequest;
+import com.javainterview.interviewhub.dto.ResetPasswordRequest;
+import com.javainterview.interviewhub.service.PasswordResetService;
 
 @RequiredArgsConstructor
 @RestController
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+    private final PasswordResetService passwordResetService;
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(
@@ -44,5 +48,28 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<String> logout() {
         return ResponseEntity.ok("Logout successful");
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(
+            @Valid @RequestBody ForgotPasswordRequest request
+    ) {
+        passwordResetService.requestPasswordReset(request.email());
+
+        return ResponseEntity.ok(
+                "If an account exists for this email, a password reset link has been sent."
+        );
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(
+            @Valid @RequestBody ResetPasswordRequest request
+    ) {
+        passwordResetService.resetPassword(
+                request.token(),
+                request.newPassword()
+        );
+
+        return ResponseEntity.ok("Password reset successfully.");
     }
 }
