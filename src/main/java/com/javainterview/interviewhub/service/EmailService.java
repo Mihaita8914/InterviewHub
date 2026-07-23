@@ -1,31 +1,34 @@
 package com.javainterview.interviewhub.service;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 
-@RequiredArgsConstructor
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class EmailService {
 
-    private final JavaMailSender mailSender;
+    private final RestClient restClient =
+            RestClient.create("https://api.resend.com");
 
     @Value("${app.frontend-url}")
     private String frontendUrl;
 
-    @Value("${spring.mail.username}")
-    private String senderEmail;
+    @Value("${RESEND_API_KEY:}")
+    private String resendApiKey;
 
-    public void sendPasswordResetEmail(String recipientEmail, String token) {
-        String resetLink = frontendUrl + "/reset-password?token=" + token;
+    public void sendPasswordResetEmail(
+            String recipientEmail,
+            String token
+    ) {
+        String resetLink =
+                frontendUrl + "/reset-password?token=" + token;
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(senderEmail);
-        message.setTo(recipientEmail);
-        message.setSubject("Reset your InterviewHub password");
-        message.setText("""
+        String emailText = """
                 Hello,
 
                 We received a request to reset your InterviewHub password.
@@ -38,8 +41,25 @@ public class EmailService {
                 If you did not request a password reset, you can ignore this email.
 
                 InterviewHub
-                """.formatted(resetLink));
+                """.formatted(resetLink);
 
-        mailSender.send(message);
+        Map<String, Object> requestBody = Map.of(
+                "from", "InterviewHub <onboarding@resend.dev>",
+                "to", List.of(recipientEmail),
+                "subject", "Reset your InterviewHub password",
+                "text", emailText
+        );
+
+        restClient
+                .post()
+                .uri("/emails")
+                .header(
+                        HttpHeaders.AUTHORIZATION,
+                        "Bearer " + resendApiKey
+                )
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(requestBody)
+                .retrieve()
+                .toBodilessEntity();
     }
 }
