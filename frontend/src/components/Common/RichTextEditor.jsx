@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import "./RichTextEditor.css";
 
 function RichTextEditor({ value, onChange, hasError = false }) {
     const editor = useEditor({

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import RichTextEditor from "../../components/common/RichTextEditor";
+import RichTextEditor from "../../components/Common/RichTextEditor";
 
 import {
     createQuestion,
