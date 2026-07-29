@@ -5,6 +5,7 @@ import com.javainterview.interviewhub.dto.QuestionResponse;
 import com.javainterview.interviewhub.entity.Question;
 import com.javainterview.interviewhub.enums.Category;
 import com.javainterview.interviewhub.enums.Difficulty;
+import com.javainterview.interviewhub.enums.Topic;
 import com.javainterview.interviewhub.exception.QuestionNotFoundException;
 import com.javainterview.interviewhub.mapper.QuestionMapper;
 import com.javainterview.interviewhub.repository.QuestionRepository;
@@ -47,6 +48,17 @@ public class QuestionService {
         return questionMapper.toResponse(question);
     }
 
+    public QuestionResponse getPublishedQuestionById(Long id) {
+        Question question = questionRepository
+                .findByIdAndPublishedTrue(id)
+                .orElseThrow(
+                        () -> new QuestionNotFoundException(id)
+                );
+
+        return questionMapper.toResponse(question);
+    }
+
+
     public QuestionResponse createQuestion(
             QuestionRequest request
     ) {
@@ -71,6 +83,7 @@ public class QuestionService {
         question.setQuestion(request.getQuestion());
         question.setAnswer(request.getAnswer());
         question.setCategory(request.getCategory());
+        question.setTopic(request.getTopic());
         question.setDifficulty(request.getDifficulty());
         question.setExampleCode(request.getExampleCode());
         question.setCommonMistakes(request.getCommonMistakes());
@@ -155,6 +168,7 @@ public class QuestionService {
 
     public Page<QuestionResponse> filterQuestions(
             Category category,
+            Topic topic,
             Difficulty difficulty,
             Boolean published,
             String keyword,
@@ -165,6 +179,11 @@ public class QuestionService {
                         .where(
                                 QuestionSpecification.hasCategory(
                                         category
+                                )
+                        )
+                        .and(
+                                QuestionSpecification.hasTopic(
+                                        topic
                                 )
                         )
                         .and(

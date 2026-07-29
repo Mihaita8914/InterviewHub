@@ -3,6 +3,7 @@ package com.javainterview.interviewhub.specification;
 import com.javainterview.interviewhub.entity.Question;
 import com.javainterview.interviewhub.enums.Category;
 import com.javainterview.interviewhub.enums.Difficulty;
+import com.javainterview.interviewhub.enums.Topic;
 import org.springframework.data.jpa.domain.Specification;
 
 public final class QuestionSpecification {
@@ -19,6 +20,19 @@ public final class QuestionSpecification {
             return criteriaBuilder.equal(
                     root.get("category"),
                     category
+            );
+        };
+    }
+
+    public static Specification<Question> hasTopic(Topic topic) {
+        return (root, query, criteriaBuilder) -> {
+            if (topic == null) {
+                return criteriaBuilder.conjunction();
+            }
+
+            return criteriaBuilder.equal(
+                    root.get("topic"),
+                    topic
             );
         };
     }

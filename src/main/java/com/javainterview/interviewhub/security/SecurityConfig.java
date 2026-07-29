@@ -29,39 +29,80 @@ public class SecurityConfig {
     private String allowedOrigins;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http
+    ) throws Exception {
+
         http
                 .csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
+
+                        // Authentication
                         .requestMatchers(
                                 "/api/auth/register",
                                 "/api/auth/login",
                                 "/api/auth/forgot-password",
                                 "/api/auth/reset-password"
                         ).permitAll()
+
+                        // Infrastructure
                         .requestMatchers("/error").permitAll()
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/actuator/health", "/actuator/health/**").permitAll()
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**"
+                        ).permitAll()
+                        .requestMatchers(
+                                "/actuator/health",
+                                "/actuator/health/**"
+                        ).permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/api/questions/published").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/questions/random").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/questions/filter").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/questions/search").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/questions/category/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/questions/difficulty/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/questions/**").permitAll()
+                        // Admin GET endpoints
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/questions/admin/**",
+                                "/api/questions",
+                                "/api/questions/search",
+                                "/api/questions/category/**",
+                                "/api/questions/difficulty/**"
+                        ).hasRole("ADMIN")
 
-                        .requestMatchers(HttpMethod.POST, "/api/questions/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/questions/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/questions/**").hasRole("ADMIN")
+                        // Public GET endpoints
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/questions/published",
+                                "/api/questions/random",
+                                "/api/questions/filter",
+                                "/api/questions/{id}"
+                        ).permitAll()
+
+                        // Admin write operations
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/questions/**"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/api/questions/**"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.DELETE,
+                                "/api/questions/**"
+                        ).hasRole("ADMIN")
 
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        .sessionCreationPolicy(
+                                SessionCreationPolicy.STATELESS
+                        )
                 )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(
+                        jwtAuthenticationFilter,
+                        UsernamePasswordAuthenticationFilter.class
+                );
 
         return http.build();
     }

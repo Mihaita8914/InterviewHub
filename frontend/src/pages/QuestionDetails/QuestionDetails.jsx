@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import DOMPurify from "dompurify";
+import "../../components/Common/RichTextEditor.css";
+
 import { getQuestionById } from "../../api/QuestionService";
 import {
     addFavorite,
@@ -7,6 +10,32 @@ import {
     removeFavorite
 } from "../../api/FavoriteService";
 import { useAuth } from "../../context/AuthContext";
+
+function formatLabel(value) {
+    if (!value) {
+        return "";
+    }
+
+    return value
+        .replaceAll("_", " ")
+        .toLowerCase()
+        .replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+function getFollowUpQuestions(value) {
+    if (!value) {
+        return [];
+    }
+
+    if (Array.isArray(value)) {
+        return value.filter(Boolean);
+    }
+
+    return value
+        .split(/\r?\n/)
+        .map((item) => item.replace(/^[-*•]\s*/, "").trim())
+        .filter(Boolean);
+}
 
 function QuestionDetails() {
     const { id } = useParams();
@@ -101,9 +130,16 @@ function QuestionDetails() {
     if (error) {
         return (
             <div className="container py-5">
-                <div className="alert alert-danger">
+                <div className="alert alert-danger" role="alert">
                     {error}
                 </div>
+
+                <Link
+                    to="/questions"
+                    className="btn btn-outline-secondary"
+                >
+                    Back to questions
+                </Link>
             </div>
         );
     }
@@ -111,6 +147,10 @@ function QuestionDetails() {
     if (!question) {
         return null;
     }
+
+    const followUpQuestions = getFollowUpQuestions(
+        question.followUpQuestions
+    );
 
     return (
         <main className="bg-light min-vh-100 py-4 py-md-5">
@@ -121,11 +161,19 @@ function QuestionDetails() {
                             <div>
                                 <div className="d-flex flex-wrap gap-2 mb-3">
                                     <span className="badge text-bg-primary">
-                                        {question.category}
+                                        {question.category === "JAVA"
+                                            ? "Java Core"
+                                            : formatLabel(question.category)}
                                     </span>
 
+                                    {question.topic && (
+                                        <span className="badge text-bg-info">
+                                            {formatLabel(question.topic)}
+                                        </span>
+                                    )}
+
                                     <span className="badge text-bg-warning">
-                                        {question.difficulty}
+                                        {formatLabel(question.difficulty)}
                                     </span>
                                 </div>
 
@@ -190,10 +238,62 @@ function QuestionDetails() {
                                 Answer
                             </h2>
 
-                            <p className="text-secondary mb-0">
-                                {question.answer}
-                            </p>
+                            <div
+                                className="rich-text-display text-secondary"
+                                dangerouslySetInnerHTML={{
+                                    __html: DOMPurify.sanitize(
+                                        question.answer || ""
+                                    )
+                                }}
+                            />
                         </section>
+
+                        {question.exampleCode && (
+                            <section className="py-3">
+                                <h2 className="h4 fw-bold">
+                                    Example Code
+                                </h2>
+
+                                <pre className="bg-dark text-light rounded p-3 overflow-auto mb-0">
+                                    <code>{question.exampleCode}</code>
+                                </pre>
+                            </section>
+                        )}
+
+                        {question.commonMistakes && (
+                            <section className="py-3">
+                                <h2 className="h4 fw-bold">
+                                    Common Mistakes
+                                </h2>
+
+                                <div className="alert alert-warning mb-0">
+                                    <div className="question-multiline-text">
+                                        {question.commonMistakes}
+                                    </div>
+                                </div>
+                            </section>
+                        )}
+
+                        {followUpQuestions.length > 0 && (
+                            <section className="py-3">
+                                <h2 className="h4 fw-bold">
+                                    Follow-up Questions
+                                </h2>
+
+                                <ul className="mb-0">
+                                    {followUpQuestions.map(
+                                        (followUpQuestion, index) => (
+                                            <li
+                                                key={`${followUpQuestion}-${index}`}
+                                                className="mb-2"
+                                            >
+                                                {followUpQuestion}
+                                            </li>
+                                        )
+                                    )}
+                                </ul>
+                            </section>
+                        )}
 
                         <div className="mt-4">
                             <Link

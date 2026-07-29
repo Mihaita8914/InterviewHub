@@ -2,6 +2,7 @@ package com.javainterview.interviewhub.entity;
 
 import com.javainterview.interviewhub.enums.Category;
 import com.javainterview.interviewhub.enums.Difficulty;
+import com.javainterview.interviewhub.enums.Topic;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -46,6 +47,9 @@ public class Question {
 
     @Enumerated(EnumType.STRING)
     private Category category;
+
+    @Enumerated(EnumType.STRING)
+    private Topic topic;
 
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;

@@ -2,6 +2,7 @@ package com.javainterview.interviewhub.dto;
 
 import com.javainterview.interviewhub.enums.Category;
 import com.javainterview.interviewhub.enums.Difficulty;
+import com.javainterview.interviewhub.enums.Topic;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,6 +17,7 @@ public class QuestionResponse {
     private String question;
     private String answer;
     private Category category;
+    private Topic topic;
     private Difficulty difficulty;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

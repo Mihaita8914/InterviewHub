@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
-    getQuestions,
+    getAdminQuestions,
     deleteQuestion
 } from "../../api/QuestionService";
+
 
 function Admin() {
     const [questions, setQuestions] = useState([]);
@@ -34,10 +35,9 @@ function Admin() {
         const timeoutId = setTimeout(() => {
             setLoading(true);
 
-            getQuestions({
+            getAdminQuestions({
                 page: currentPage,
                 size: pageSize,
-                keyword: searchTerm
             })
                 .then(data => {
                     setQuestions(data.content);
@@ -176,6 +176,7 @@ function Admin() {
                                     <th>Title</th>
                                     <th>Category</th>
                                     <th>Difficulty</th>
+                                    <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -190,6 +191,18 @@ function Admin() {
                                         <td>{question.category}</td>
 
                                         <td>{question.difficulty}</td>
+
+                                        <td>
+                                        {question.published ? (
+                                            <span className="badge bg-success">
+                                                Published
+                                            </span>
+                                        ) : (
+                                            <span className="badge bg-warning text-dark">
+                                                Draft
+                                            </span>
+                                        )}
+                                    </td>
 
                                         <td>
                                             <button

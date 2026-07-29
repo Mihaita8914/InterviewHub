@@ -43,6 +43,7 @@ public interface QuestionRepository extends
             nativeQuery = true
     )
     Optional<Question> findRandomPublishedQuestion();
+    Optional<Question> findByIdAndPublishedTrue(Long id);
 
     Page<Question> findByCategoryAndDifficultyAndPublished(
             Category category,

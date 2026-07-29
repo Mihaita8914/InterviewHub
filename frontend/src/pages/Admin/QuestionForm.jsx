@@ -1,17 +1,71 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import RichTextEditor from "../../components/Common/RichTextEditor";
 
 import {
     createQuestion,
-    getQuestionById,
+    getAdminQuestionById,
     updateQuestion
 } from "../../api/QuestionService";
+
+const TOPICS_BY_CATEGORY = {
+    JAVA: [
+        { value: "OOP", label: "OOP" },
+        { value: "STRINGS", label: "Strings" },
+        { value: "COLLECTIONS", label: "Collections" },
+        { value: "GENERICS", label: "Generics" },
+        { value: "EXCEPTIONS", label: "Exceptions" },
+        { value: "STREAMS_AND_LAMBDAS", label: "Streams & Lambdas" },
+        { value: "MULTITHREADING", label: "Multithreading" },
+        { value: "JVM_AND_MEMORY", label: "JVM & Memory" },
+        { value: "SOLID", label: "SOLID" },
+        { value: "DESIGN_PATTERNS", label: "Design Patterns" }
+    ],
+
+    SPRING: [
+        { value: "SPRING_CORE", label: "Spring Core" },
+        { value: "SPRING_BOOT", label: "Spring Boot" },
+        { value: "REST_API", label: "REST API" },
+        { value: "SPRING_SECURITY", label: "Spring Security" },
+        { value: "SPRING_DATA_JPA", label: "Spring Data JPA" },
+        { value: "MICROSERVICES", label: "Microservices" },
+        { value: "INTEGRATION_TESTING", label: "Integration Testing" }
+    ],
+
+    SQL: [
+        { value: "SQL_BASICS", label: "SQL Basics" },
+        { value: "JOINS", label: "Joins" },
+        { value: "TRANSACTIONS", label: "Transactions" },
+        { value: "INDEXES", label: "Indexes" }
+    ],
+
+    HIBERNATE: [
+        { value: "SPRING_DATA_JPA", label: "JPA & Hibernate" },
+        { value: "TRANSACTIONS", label: "Transactions" }
+    ],
+
+    DOCKER: [
+        { value: "DOCKER", label: "Docker" }
+    ],
+
+    KAFKA: [
+        { value: "KAFKA", label: "Kafka" }
+    ],
+
+    DESIGN_PATTERNS: [
+        { value: "DESIGN PATTERNS", label: "DESIGN PATTERNS" }
+    ],
+    CAMUNDA: [
+        { value: "CAMUNDA", label: "Camunda" }
+    ]
+};
 
 function QuestionForm() {
     const [title, setTitle] = useState("");
     const [question, setQuestion] = useState("");
     const [answer, setAnswer] = useState("");
     const [category, setCategory] = useState("JAVA");
+    const [topic, setTopic] = useState("OOP");;
     const [difficulty, setDifficulty] = useState("EASY");
     const [exampleCode, setExampleCode] = useState("");
     const [commonMistakes, setCommonMistakes] = useState("");
@@ -31,12 +85,13 @@ function QuestionForm() {
             return;
         }
 
-        getQuestionById(id)
+        getAdminQuestionById(id)
             .then(data => {
                 setTitle(data.title || "");
                 setQuestion(data.question || "");
                 setAnswer(data.answer || "");
                 setCategory(data.category || "JAVA");
+                setTopic(data.topic || "GENERAL");
                 setDifficulty(data.difficulty || "EASY");
                 setExampleCode(data.exampleCode || "");
                 setCommonMistakes(data.commonMistakes || "");
@@ -77,6 +132,7 @@ function QuestionForm() {
             question,
             answer,
             category,
+            topic,
             difficulty,
             exampleCode,
             commonMistakes,
@@ -161,11 +217,10 @@ saveRequest
                         Answer
                     </label>
 
-                    <textarea
-                        className={`form-control ${errors.answer ? "is-invalid" : ""}`}
-                        rows="6"
+                    <RichTextEditor
                         value={answer}
-                        onChange={(event) => setAnswer(event.target.value)}
+                        onChange={setAnswer}
+                        hasError={Boolean(errors.answer)}
                     />
 
                     {errors.answer && (
@@ -222,50 +277,82 @@ saveRequest
                     <select
                         className="form-select"
                         value={category}
-                        onChange={(event) => setCategory(event.target.value)}
+                        onChange={(event) => {
+                            const selectedCategory = event.target.value;
+                            const availableTopics =
+                                TOPICS_BY_CATEGORY[selectedCategory] || [];
+
+                            setCategory(selectedCategory);
+                            setTopic(
+                                availableTopics.length > 0
+                                    ? availableTopics[0].value
+                                    : "GENERAL"
+                            );
+                        }}
                     >
-                        <option value="JAVA">JAVA</option>
+                        <option value="JAVA">JAVA CORE</option>
                         <option value="SPRING">SPRING</option>
                         <option value="SQL">SQL</option>
                         <option value="HIBERNATE">HIBERNATE</option>
                         <option value="DOCKER">DOCKER</option>
                         <option value="CAMUNDA">CAMUNDA</option>
                         <option value="KAFKA">KAFKA</option>
+                        <option value="DESIGN_PATTERNS">DESIGN PATTERNS</option>
                     </select>
                 </div>
 
                 <div className="mb-3">
-                    <label className="form-label">
-                        Difficulty
-                    </label>
+    <label className="form-label">Topic</label>
 
-                    <select
-                        className="form-select"
-                        value={difficulty}
-                        onChange={(event) => setDifficulty(event.target.value)}
-                    >
-                        <option value="EASY">EASY</option>
-                        <option value="MEDIUM">MEDIUM</option>
-                        <option value="HARD">HARD</option>
-                    </select>
-                </div>
+    <select
+        className="form-select"
+        value={topic}
+        onChange={(event) => setTopic(event.target.value)}
+    >
+        {(TOPICS_BY_CATEGORY[category] || []).map(
+            (topicOption) => (
+                <option
+                    key={topicOption.value}
+                    value={topicOption.value}
+                >
+                    {topicOption.label}
+                </option>
+            )
+        )}
+    </select>
+                    </div>
+                        <div className="mb-3">
+                            <label className="form-label">
+                                Difficulty
+                            </label>
 
-                <div className="form-check mb-3">
-                    <input
-                        id="published"
-                        className="form-check-input"
-                        type="checkbox"
-                        checked={published}
-                        onChange={(event) => setPublished(event.target.checked)}
-                    />
+                            <select
+                                className="form-select"
+                                value={difficulty}
+                                onChange={(event) => setDifficulty(event.target.value)}
+                            >
+                                <option value="EASY">EASY</option>
+                                <option value="MEDIUM">MEDIUM</option>
+                                <option value="HARD">HARD</option>
+                            </select>
+                        </div>
 
-                    <label
-                        className="form-check-label"
-                        htmlFor="published"
-                    >
-                        Published
-                    </label>
-                </div>
+                        <div className="form-check mb-3">
+                            <input
+                                id="published"
+                                className="form-check-input"
+                                type="checkbox"
+                                checked={published}
+                                onChange={(event) => setPublished(event.target.checked)}
+                            />
+
+                            <label
+                                className="form-check-label"
+                                htmlFor="published"
+                            >
+                                Published
+                            </label>
+                        </div>
 
 <button
     type="submit"
