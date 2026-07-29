@@ -9,6 +9,7 @@ function Questions() {
     const [questions, setQuestions] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [category, setCategory] = useState("");
+    const [topic, setTopic] = useState("");
     const [difficulty, setDifficulty] = useState("");
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
@@ -27,6 +28,7 @@ function Questions() {
             size: 5,
             keyword: searchTerm,
             category,
+            topic,
             difficulty
         })
             .then(data => {
@@ -63,6 +65,7 @@ function Questions() {
         currentPage,
         searchTerm,
         category,
+        topic,
         difficulty,
         reloadKey
     ]);
@@ -74,8 +77,14 @@ function Questions() {
 
     function handleCategoryChange(value) {
         setCategory(value);
+        setTopic("");
         setCurrentPage(0);
     }
+
+    function handleTopicChange(value) {
+    setTopic(value);
+    setCurrentPage(0);
+}
 
     function handleDifficultyChange(value) {
         setDifficulty(value);
@@ -113,8 +122,10 @@ function Questions() {
 
                         <FilterPanel
                             category={category}
+                            topic={topic}
                             difficulty={difficulty}
                             onCategoryChange={handleCategoryChange}
+                            onTopicChange={handleTopicChange}
                             onDifficultyChange={
                                 handleDifficultyChange
                             }

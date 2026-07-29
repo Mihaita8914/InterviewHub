@@ -5,6 +5,7 @@ export async function getQuestions({
     size = 5,
     keyword = "",
     category = "",
+    topic = "",
     difficulty = ""
 }) {
     const response = await axiosClient.get("/questions/filter", {
@@ -13,6 +14,7 @@ export async function getQuestions({
             size,
             keyword: keyword || null,
             category: category || null,
+            topic: topic || null,
             difficulty: difficulty || null
         }
     });
