@@ -48,6 +48,17 @@ public class QuestionService {
         return questionMapper.toResponse(question);
     }
 
+    public QuestionResponse getPublishedQuestionById(Long id) {
+        Question question = questionRepository
+                .findByIdAndPublishedTrue(id)
+                .orElseThrow(
+                        () -> new QuestionNotFoundException(id)
+                );
+
+        return questionMapper.toResponse(question);
+    }
+
+
     public QuestionResponse createQuestion(
             QuestionRequest request
     ) {
