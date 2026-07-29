@@ -27,6 +27,30 @@ export async function getQuestionById(id) {
     return response.data;
 }
 
+export async function getAdminQuestionById(id) {
+    const response = await axiosClient.get(
+        `/questions/admin/${id}`
+    );
+
+    return response.data;
+}
+
+export async function getAdminQuestions({
+    page = 0,
+    size = 10
+}) {
+    const response = await axiosClient.get("/questions", {
+        params: {
+            page,
+            size,
+            sort: "id,desc"
+        }
+    });
+
+    return response.data;
+}
+
+
 export async function deleteQuestion(id) {
     await axiosClient.delete(`/questions/${id}`);
 }

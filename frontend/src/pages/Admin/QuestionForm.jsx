@@ -4,7 +4,7 @@ import RichTextEditor from "../../components/Common/RichTextEditor";
 
 import {
     createQuestion,
-    getQuestionById,
+    getAdminQuestionById,
     updateQuestion
 } from "../../api/QuestionService";
 
@@ -85,7 +85,7 @@ function QuestionForm() {
             return;
         }
 
-        getQuestionById(id)
+        getAdminQuestionById(id)
             .then(data => {
                 setTitle(data.title || "");
                 setQuestion(data.question || "");
