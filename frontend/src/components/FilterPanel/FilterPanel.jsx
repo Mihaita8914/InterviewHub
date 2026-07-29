@@ -16,10 +16,11 @@ function FilterPanel({
                     onChange={(e) => onCategoryChange(e.target.value)}
                 >
                     <option value="">All Categories</option>
-                    <option value="JAVA">JAVA</option>
+                    <option value="JAVA">JAVA CORE</option>
                     <option value="SPRING">SPRING</option>
                     <option value="SQL">SQL</option>
                     <option value="DOCKER">DOCKER</option>
+                    <option value="DOCKDESIGN_PATTERNS">DESIGN_PATTERNS</option>
                 </select>
             </div>
 

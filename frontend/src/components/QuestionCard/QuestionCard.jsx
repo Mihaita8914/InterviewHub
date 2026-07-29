@@ -16,7 +16,7 @@ function QuestionCard({ question }) {
                 </h3>
 
                 <span className="badge bg-primary me-2">
-                    {question.category}
+                    {question.category === "JAVA" ? "JAVA CORE" : question.category}
                 </span>
 
                 <span className="badge bg-warning text-dark">
@@ -27,9 +27,6 @@ function QuestionCard({ question }) {
 
                 <h5>Question</h5>
                 <p>{question.question}</p>
-
-                <h5>Answer</h5>
-                <p>{question.answer}</p>
 
             </div>
         </div>

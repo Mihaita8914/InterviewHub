@@ -4,6 +4,7 @@ import com.javainterview.interviewhub.dto.QuestionRequest;
 import com.javainterview.interviewhub.dto.QuestionResponse;
 import com.javainterview.interviewhub.enums.Category;
 import com.javainterview.interviewhub.enums.Difficulty;
+import com.javainterview.interviewhub.enums.Topic;
 import com.javainterview.interviewhub.service.QuestionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -71,13 +72,14 @@ public class QuestionController {
     @GetMapping("/filter")
     public ResponseEntity<Page<QuestionResponse>> filterQuestions(
             @RequestParam(required = false) Category category,
+            @RequestParam(required = false) Topic topic,
             @RequestParam(required = false) Difficulty difficulty,
             @RequestParam(required = false) Boolean published,
             @RequestParam(required = false) String keyword,
             Pageable pageable
     ) {
         return ResponseEntity.ok(
-                questionService.filterQuestions(category, difficulty, published, keyword, pageable)
+                questionService.filterQuestions(category, topic, difficulty, published, keyword, pageable)
         );
     }
 

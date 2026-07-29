@@ -2,6 +2,7 @@ package com.javainterview.interviewhub.dto;
 
 import com.javainterview.interviewhub.enums.Category;
 import com.javainterview.interviewhub.enums.Difficulty;
+import com.javainterview.interviewhub.enums.Topic;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -26,6 +27,8 @@ public class QuestionRequest {
 
     @NotNull(message = "Category is required")
     private Category category;
+
+    private Topic topic;
 
     @NotNull(message = "Difficulty is required")
     private Difficulty difficulty;

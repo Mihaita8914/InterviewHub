@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getQuestionById } from "../../api/QuestionService";
+import DOMPurify from "dompurify";
 import {
     addFavorite,
     getFavoriteStatus,
@@ -121,7 +122,7 @@ function QuestionDetails() {
                             <div>
                                 <div className="d-flex flex-wrap gap-2 mb-3">
                                     <span className="badge text-bg-primary">
-                                        {question.category}
+                                        {question.category === "JAVA" ? "Java Core" : question.category}
                                     </span>
 
                                     <span className="badge text-bg-warning">
@@ -190,9 +191,12 @@ function QuestionDetails() {
                                 Answer
                             </h2>
 
-                            <p className="text-secondary mb-0">
-                                {question.answer}
-                            </p>
+                            <div
+                                className="rich-text-display text-secondary"
+                                dangerouslySetInnerHTML={{
+                                    __html: DOMPurify.sanitize(question.answer || "")
+                                }}
+                            />
                         </section>
 
                         <div className="mt-4">
