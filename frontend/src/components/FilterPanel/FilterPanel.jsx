@@ -1,3 +1,6 @@
+import { QUESTION_CATEGORIES } from "../../constants/questionCategories";
+
+
 const TOPICS_BY_CATEGORY = {
     JAVA: [
         { value: "OOP", label: "OOP" },
@@ -67,6 +70,20 @@ const TOPICS_BY_CATEGORY = {
         }
     ],
 
+    REST: [
+    {
+        value: "REST_API",
+        label: "REST API"
+    }
+],
+
+    MICROSERVICES: [
+    {
+        value: "MICROSERVICES",
+        label: "Microservices"
+    }
+],
+
     DOCKER: [
         { value: "DOCKER", label: "Docker" }
     ],
@@ -105,15 +122,14 @@ function FilterPanel({
                     }
                 >
                     <option value="">All Categories</option>
-                    <option value="JAVA">Java Core</option>
-                    <option value="SPRING">Spring</option>
-                    <option value="SQL">SQL</option>
-                    <option value="HIBERNATE">
-                        Hibernate/JPA
-                    </option>
-                    <option value="DOCKER">Docker</option>
-                    <option value="CAMUNDA">Camunda</option>
-                    <option value="KAFKA">Kafka</option>
+                    {QUESTION_CATEGORIES.map(categoryOption => (
+                        <option
+                            key={categoryOption.value}
+                            value={categoryOption.value}
+                        >
+                            {categoryOption.label}
+                        </option>
+                    ))}
                 </select>
             </div>
 

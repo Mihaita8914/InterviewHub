@@ -3,45 +3,8 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { getFavorites } from "../../api/FavoriteService";
 import { getRandomQuestion } from "../../api/QuestionService";
+import { QUESTION_CATEGORIES } from "../../constants/questionCategories";
 
-
-const quickCategories = [
-    {
-        name: "Java",
-        value: "JAVA",
-        description: "Core Java, collections and streams"
-    },
-    {
-        name: "Spring",
-        value: "SPRING",
-        description: "Spring Boot, Security and REST"
-    },
-    {
-        name: "SQL",
-        value: "SQL",
-        description: "Queries, joins and databases"
-    },
-    {
-        name: "Docker",
-        value: "DOCKER",
-        description: "Containers, images and deployment"
-    },
-    {
-        name: "Hibernate",
-        value: "HIBERNATE",
-        description: "JPA, entities and persistence"
-    },
-    {
-        name: "Camunda",
-        value: "CAMUNDA",
-        description: "Processes, workers and BPMN"
-    },
-    {
-        name: "Kafka",
-        value: "KAFKA",
-        description: "Events, producers and consumers"
-    }
-];
 
 function Dashboard() {
     const { user } = useAuth();
@@ -274,7 +237,7 @@ useEffect(() => {
         </div>
 
         <div className="row g-3">
-            {quickCategories.map(category => (
+            {QUESTION_CATEGORIES.map(category => (
                 <div
                     key={category.value}
                     className="col-12 col-sm-6 col-lg-4"
@@ -286,7 +249,7 @@ useEffect(() => {
                         <div className="card-body">
                             <div className="d-flex justify-content-between align-items-center mb-2">
                                 <h3 className="h5 fw-bold mb-0">
-                                    {category.name}
+                                    {category.label}
                                 </h3>
 
                                 <span className="text-primary">
@@ -295,7 +258,7 @@ useEffect(() => {
                             </div>
 
                             <p className="small text-secondary mb-0">
-                                {category.description}
+                                {category.shortDescription}
                             </p>
                         </div>
                     </Link>
