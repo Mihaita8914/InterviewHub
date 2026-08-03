@@ -1,20 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { QUESTION_CATEGORIES } from "../../constants/questionCategories";
 
 function Home() {
     const navigate = useNavigate();
     const { isAuthenticated } = useAuth();
 
-    const technologies = [
-        "Java",
-        "Spring Boot",
-        "SQL",
-        "Hibernate",
-        "Docker",
-        "Camunda",
-        "PostgreSQL",
-        "REST APIs"
-    ];
 
     const benefits = [
         {
@@ -246,18 +237,24 @@ function Home() {
                     </h2>
 
                     <p className="text-secondary mb-4">
-                        Structured preparation for important Java backend
-                        topics.
+                        Choose a category and start practicing the topics
+                        commonly discussed in Java backend interviews.
                     </p>
 
                     <div className="d-flex flex-wrap justify-content-center gap-3">
-                        {technologies.map(technology => (
-                            <span
-                                key={technology}
-                                className="badge rounded-pill text-bg-dark fs-6 px-4 py-3"
+                        {QUESTION_CATEGORIES.map(category => (
+                            <button
+                                key={category.value}
+                                type="button"
+                                className="btn btn-dark rounded-pill fs-6 px-4 py-3"
+                                onClick={() =>
+                                    navigate(
+                                        `/questions?category=${category.value}`
+                                    )
+                                }
                             >
-                                {technology}
-                            </span>
+                                {category.label}
+                            </button>
                         ))}
                     </div>
                 </div>

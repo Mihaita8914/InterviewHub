@@ -2,70 +2,21 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import RichTextEditor from "../../components/Common/RichTextEditor";
 
+import { QUESTION_CATEGORIES } from "../../constants/questionCategories";
+import { TOPICS_BY_CATEGORY } from "../../constants/questionTopics";
+
 import {
     createQuestion,
     getAdminQuestionById,
     updateQuestion
 } from "../../api/QuestionService";
 
-const TOPICS_BY_CATEGORY = {
-    JAVA: [
-        { value: "OOP", label: "OOP" },
-        { value: "STRINGS", label: "Strings" },
-        { value: "COLLECTIONS", label: "Collections" },
-        { value: "GENERICS", label: "Generics" },
-        { value: "EXCEPTIONS", label: "Exceptions" },
-        { value: "STREAMS_AND_LAMBDAS", label: "Streams & Lambdas" },
-        { value: "MULTITHREADING", label: "Multithreading" },
-        { value: "JVM_AND_MEMORY", label: "JVM & Memory" },
-        { value: "SOLID", label: "SOLID" },
-        { value: "DESIGN_PATTERNS", label: "Design Patterns" }
-    ],
-
-    SPRING: [
-        { value: "SPRING_CORE", label: "Spring Core" },
-        { value: "SPRING_BOOT", label: "Spring Boot" },
-        { value: "REST_API", label: "REST API" },
-        { value: "SPRING_SECURITY", label: "Spring Security" },
-        { value: "SPRING_DATA_JPA", label: "Spring Data JPA" },
-        { value: "MICROSERVICES", label: "Microservices" },
-        { value: "INTEGRATION_TESTING", label: "Integration Testing" }
-    ],
-
-    SQL: [
-        { value: "SQL_BASICS", label: "SQL Basics" },
-        { value: "JOINS", label: "Joins" },
-        { value: "TRANSACTIONS", label: "Transactions" },
-        { value: "INDEXES", label: "Indexes" }
-    ],
-
-    HIBERNATE: [
-        { value: "SPRING_DATA_JPA", label: "JPA & Hibernate" },
-        { value: "TRANSACTIONS", label: "Transactions" }
-    ],
-
-    DOCKER: [
-        { value: "DOCKER", label: "Docker" }
-    ],
-
-    KAFKA: [
-        { value: "KAFKA", label: "Kafka" }
-    ],
-
-    DESIGN_PATTERNS: [
-        { value: "DESIGN PATTERNS", label: "DESIGN PATTERNS" }
-    ],
-    CAMUNDA: [
-        { value: "CAMUNDA", label: "Camunda" }
-    ]
-};
-
 function QuestionForm() {
     const [title, setTitle] = useState("");
     const [question, setQuestion] = useState("");
     const [answer, setAnswer] = useState("");
     const [category, setCategory] = useState("JAVA");
-    const [topic, setTopic] = useState("OOP");;
+    const [topic, setTopic] = useState("OOP");
     const [difficulty, setDifficulty] = useState("EASY");
     const [exampleCode, setExampleCode] = useState("");
     const [commonMistakes, setCommonMistakes] = useState("");
@@ -118,6 +69,10 @@ function QuestionForm() {
 
         if (!answer.trim()) {
             validationErrors.answer = "Answer is required.";
+        }
+
+        if (!topic) {
+            validationErrors.topic = "Topic is required.";
         }
 
         if (Object.keys(validationErrors).length > 0) {
@@ -286,18 +241,18 @@ saveRequest
                             setTopic(
                                 availableTopics.length > 0
                                     ? availableTopics[0].value
-                                    : "GENERAL"
+                                    : ""
                             );
                         }}
                     >
-                        <option value="JAVA">JAVA CORE</option>
-                        <option value="SPRING">SPRING</option>
-                        <option value="SQL">SQL</option>
-                        <option value="HIBERNATE">HIBERNATE</option>
-                        <option value="DOCKER">DOCKER</option>
-                        <option value="CAMUNDA">CAMUNDA</option>
-                        <option value="KAFKA">KAFKA</option>
-                        <option value="DESIGN_PATTERNS">DESIGN PATTERNS</option>
+                        {QUESTION_CATEGORIES.map(categoryOption => (
+                            <option
+                                key={categoryOption.value}
+                                value={categoryOption.value}
+                            >
+                                {categoryOption.label}
+                            </option>
+                        ))}
                     </select>
                 </div>
 
@@ -320,6 +275,12 @@ saveRequest
             )
         )}
     </select>
+
+    {errors.topic && (
+    <div className="text-danger small mt-1">
+        {errors.topic}
+    </div>
+)}
                     </div>
                         <div className="mb-3">
                             <label className="form-label">

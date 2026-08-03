@@ -10,6 +10,12 @@ spring:
     hikari:
       maximum-pool-size: ${DB_POOL_SIZE:5}
 
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 0
+    locations: classpath:db/migration
+
   jpa:
     hibernate:
       ddl-auto: update
