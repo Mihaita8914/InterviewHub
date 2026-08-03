@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { getQuestions } from "../../api/QuestionService";
 import QuestionCard from "../../components/QuestionCard/QuestionCard";
 import SearchBar from "../../components/SearchBar/SearchBar";
@@ -6,9 +7,12 @@ import FilterPanel from "../../components/FilterPanel/FilterPanel";
 import Pagination from "../../components/Pagination/Pagination";
 
 function Questions() {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const categoryFromUrl = searchParams.get("category") || "";
+
     const [questions, setQuestions] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
-    const [category, setCategory] = useState("");
+    const [category, setCategory] = useState(categoryFromUrl);
     const [topic, setTopic] = useState("");
     const [difficulty, setDifficulty] = useState("");
     const [currentPage, setCurrentPage] = useState(0);
@@ -75,13 +79,23 @@ function Questions() {
         setCurrentPage(0);
     }
 
-    function handleCategoryChange(value) {
-        setCategory(value);
-        setTopic("");
-        setCurrentPage(0);
+function handleCategoryChange(value) {
+    setCategory(value);
+    setTopic("");
+    setCurrentPage(0);
+
+    const nextParams = new URLSearchParams(searchParams);
+
+    if (value) {
+        nextParams.set("category", value);
+    } else {
+        nextParams.delete("category");
     }
 
-    function handleTopicChange(value) {
+    setSearchParams(nextParams);
+}
+
+function handleTopicChange(value) {
     setTopic(value);
     setCurrentPage(0);
 }
