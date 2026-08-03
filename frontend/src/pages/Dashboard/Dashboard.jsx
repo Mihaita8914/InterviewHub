@@ -47,15 +47,35 @@ function Dashboard() {
     const { user } = useAuth();
 
     const [favorites, setFavorites] = useState([]);
+    const [lastPracticedQuestion, setLastPracticedQuestion] = useState(null);
     const [randomQuestion, setRandomQuestion] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [randomLoading, setRandomLoading] = useState(false);
     const [randomError, setRandomError] = useState("");
 
-    useEffect(() => {
-        loadDashboard();
-    }, []);
+useEffect(() => {
+    loadDashboard();
+
+    try {
+        const savedQuestion = localStorage.getItem(
+            "interviewhub:lastPracticedQuestion"
+        );
+
+        if (savedQuestion) {
+            setLastPracticedQuestion(JSON.parse(savedQuestion));
+        }
+    } catch (storageError) {
+        console.error(
+            "The last practiced question could not be read.",
+            storageError
+        );
+
+        localStorage.removeItem(
+            "interviewhub:lastPracticedQuestion"
+        );
+    }
+}, []);
 
     async function loadDashboard() {
         try {
@@ -285,14 +305,75 @@ function Dashboard() {
     </div>
 </section>
 
+<section className="card border-0 shadow-sm mb-4">
+    <div className="card-body p-4">
+        <span className="badge text-bg-success mb-3">
+            Continue practicing
+        </span>
+
+        {lastPracticedQuestion ? (
+            <>
+                <h2 className="h3 fw-bold">
+                    {lastPracticedQuestion.title}
+                </h2>
+
+                <div className="d-flex flex-wrap gap-2 mb-3">
+                    <span className="badge text-bg-primary">
+                        {lastPracticedQuestion.category}
+                    </span>
+
+                    {lastPracticedQuestion.topic && (
+                        <span className="badge text-bg-info">
+                            {lastPracticedQuestion.topic}
+                        </span>
+                    )}
+
+                    <span className="badge text-bg-secondary">
+                        {lastPracticedQuestion.difficulty}
+                    </span>
+                </div>
+
+                <p className="text-secondary">
+                    {lastPracticedQuestion.question}
+                </p>
+
+                <Link
+                    to={`/questions/${lastPracticedQuestion.id}`}
+                    className="btn btn-primary"
+                >
+                    Continue question
+                </Link>
+            </>
+        ) : (
+            <>
+                <h2 className="h4 fw-bold">
+                    Start your first practice session
+                </h2>
+
+                <p className="text-secondary">
+                    Open a question and it will appear here the next
+                    time you visit your dashboard.
+                </p>
+
+                <Link
+                    to="/questions"
+                    className="btn btn-outline-primary"
+                >
+                    Browse questions
+                </Link>
+            </>
+        )}
+    </div>
+</section>
+
                 <div className="row g-4">
                     <section className="col-12 col-lg-7">
     <div className="card h-100 border-0 shadow-sm">
         <div className="card-body p-4">
             <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-3">
-                <span className="badge text-bg-warning align-self-start">
-                    Continue practicing
-                </span>
+                    <span className="badge text-bg-warning align-self-start">
+                        Practice suggestion
+                    </span>
 
                 <button
                     type="button"

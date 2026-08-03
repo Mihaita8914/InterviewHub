@@ -55,7 +55,21 @@ function QuestionDetails() {
                 setError("");
 
                 const questionData = await getQuestionById(id);
+
                 setQuestion(questionData);
+
+                localStorage.setItem(
+                    "interviewhub:lastPracticedQuestion",
+                    JSON.stringify({
+                        id: questionData.id,
+                        title: questionData.title,
+                        question: questionData.question,
+                        category: questionData.category,
+                        topic: questionData.topic,
+                        difficulty: questionData.difficulty,
+                        viewedAt: new Date().toISOString()
+                    })
+                );
             } catch (requestError) {
                 setError(
                     requestError.response?.data?.error ||
