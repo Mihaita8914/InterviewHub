@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import DOMPurify from "dompurify";
 import "../../components/Common/RichTextEditor.css";
+import { markQuestionAsViewed, markQuestionAsCompleted, getQuestionProgressStatus } from "../../api/ProgressService";
 
 import { getQuestionById } from "../../api/QuestionService";
-import {
-    addFavorite,
-    getFavoriteStatus,
-    removeFavorite
-} from "../../api/FavoriteService";
+import { addFavorite, getFavoriteStatus, removeFavorite } from "../../api/FavoriteService";
 import { useAuth } from "../../context/AuthContext";
 
 function formatLabel(value) {
@@ -39,6 +36,8 @@ function getFollowUpQuestions(value) {
 
 function QuestionDetails() {
     const { id } = useParams();
+    const location = useLocation();
+    const backToQuestions = location.state?.from || "/questions";
     const { isAuthenticated } = useAuth();
 
     const [question, setQuestion] = useState(null);
@@ -47,6 +46,8 @@ function QuestionDetails() {
     const [favoriteLoading, setFavoriteLoading] = useState(false);
     const [error, setError] = useState("");
     const [favoriteError, setFavoriteError] = useState("");
+    const [progressStatus, setProgressStatus] = useState(null);
+    const [progressLoading, setProgressLoading] = useState(false);
 
     useEffect(() => {
         async function loadQuestion() {
@@ -58,18 +59,16 @@ function QuestionDetails() {
 
                 setQuestion(questionData);
 
-                localStorage.setItem(
-                    "interviewhub:lastPracticedQuestion",
-                    JSON.stringify({
-                        id: questionData.id,
-                        title: questionData.title,
-                        question: questionData.question,
-                        category: questionData.category,
-                        topic: questionData.topic,
-                        difficulty: questionData.difficulty,
-                        viewedAt: new Date().toISOString()
-                    })
-                );
+                if (isAuthenticated) {
+                    try {
+                        await markQuestionAsViewed(questionData.id);
+                    } catch (error) {
+                        console.error(
+                            "Progress could not be saved.",
+                            error
+                        );
+                    }
+                }
             } catch (requestError) {
                 setError(
                     requestError.response?.data?.error ||
@@ -81,7 +80,7 @@ function QuestionDetails() {
         }
 
         loadQuestion();
-    }, [id]);
+        }, [id, isAuthenticated]);
 
     useEffect(() => {
         async function loadFavoriteStatus() {
@@ -126,6 +125,44 @@ function QuestionDetails() {
         }
     }
 
+    useEffect(() => {
+    async function loadProgressStatus() {
+        if (!isAuthenticated) {
+            setProgressStatus(null);
+            return;
+        }
+
+        try {
+            const status = await getQuestionProgressStatus(id);
+            setProgressStatus(status.status);
+        } catch (error) {
+            console.error(
+                "Progress status could not be loaded.",
+                error
+            );
+        }
+    }
+
+    loadProgressStatus();
+}, [id, isAuthenticated]);
+
+async function handleMarkCompleted() {
+    try {
+        setProgressLoading(true);
+
+        await markQuestionAsCompleted(question.id);
+
+        setProgressStatus("COMPLETED");
+    } catch (error) {
+        console.error(
+            "Progress could not be saved.",
+            error
+        );
+    } finally {
+        setProgressLoading(false);
+    }
+}
+
     if (loading) {
         return (
             <div className="container py-5 text-center">
@@ -149,7 +186,7 @@ function QuestionDetails() {
                 </div>
 
                 <Link
-                    to="/questions"
+                    to={backToQuestions}
                     className="btn btn-outline-secondary"
                 >
                     Back to questions
@@ -310,12 +347,33 @@ function QuestionDetails() {
                         )}
 
                         <div className="mt-4">
-                            <Link
-                                to="/questions"
-                                className="btn btn-outline-secondary"
+                        {isAuthenticated && (
+                            <button
+                                type="button"
+                                className={
+                                    progressStatus === "COMPLETED"
+                                        ? "btn btn-success me-2"
+                                        : "btn btn-outline-success me-2"
+                                }
+                                onClick={handleMarkCompleted}
+                                disabled={
+                                    progressLoading ||
+                                    progressStatus === "COMPLETED"
+                                }
                             >
-                                Back to questions
-                            </Link>
+                                {progressLoading
+                                    ? "Saving..."
+                                    : progressStatus === "COMPLETED"
+                                        ? "✓ Completed"
+                                        : "Mark as completed"}
+                            </button>
+                        )}
+                        <Link
+                            to={backToQuestions}
+                            className="btn btn-outline-secondary"
+                        >
+                            Back to questions
+                        </Link>
                         </div>
                     </div>
                 </article>

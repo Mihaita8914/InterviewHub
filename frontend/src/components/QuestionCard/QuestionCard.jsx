@@ -1,13 +1,23 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function QuestionCard({ question }) {
     const navigate = useNavigate();
+    const location = useLocation();
 
     return (
         <div
             className="card mb-3 shadow-sm"
             style={{ cursor: "pointer" }}
-            onClick={() => navigate(`/questions/${question.id}`)}
+            onClick={() =>
+    navigate(
+        `/questions/${question.id}`,
+        {
+            state: {
+                from: `${location.pathname}${location.search}`
+            }
+        }
+    )
+}
         >
             <div className="card-body">
 

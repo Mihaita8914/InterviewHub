@@ -8,14 +8,19 @@ import Pagination from "../../components/Pagination/Pagination";
 
 function Questions() {
     const [searchParams, setSearchParams] = useSearchParams();
+
     const categoryFromUrl = searchParams.get("category") || "";
+    const topicFromUrl = searchParams.get("topic") || "";
+    const difficultyFromUrl = searchParams.get("difficulty") || "";
+    const searchFromUrl = searchParams.get("keyword") || "";
+    const pageFromUrl = Number(searchParams.get("page")) || 0;
 
     const [questions, setQuestions] = useState([]);
-    const [searchTerm, setSearchTerm] = useState("");
+    const [searchTerm, setSearchTerm] = useState(searchFromUrl);
     const [category, setCategory] = useState(categoryFromUrl);
-    const [topic, setTopic] = useState("");
-    const [difficulty, setDifficulty] = useState("");
-    const [currentPage, setCurrentPage] = useState(0);
+    const [topic, setTopic] = useState(topicFromUrl);
+    const [difficulty, setDifficulty] = useState(difficultyFromUrl);
+    const [currentPage, setCurrentPage] = useState(pageFromUrl);
     const [totalPages, setTotalPages] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -74,40 +79,78 @@ function Questions() {
         reloadKey
     ]);
 
-    function handleSearchChange(value) {
-        setSearchTerm(value);
-        setCurrentPage(0);
-    }
+
+    function updateSearchParams(changes) {
+    const nextParams = new URLSearchParams(searchParams);
+
+    Object.entries(changes).forEach(([key, value]) => {
+        if (
+            value === "" ||
+            value === null ||
+            value === undefined
+        ) {
+            nextParams.delete(key);
+        } else {
+            nextParams.set(key, String(value));
+        }
+    });
+
+    setSearchParams(nextParams);
+}
+
+function handleSearchChange(value) {
+    setSearchTerm(value);
+    setCurrentPage(0);
+
+    updateSearchParams({
+        keyword: value,
+        page: 0
+    });
+}
 
 function handleCategoryChange(value) {
     setCategory(value);
     setTopic("");
     setCurrentPage(0);
 
-    const nextParams = new URLSearchParams(searchParams);
-
-    if (value) {
-        nextParams.set("category", value);
-    } else {
-        nextParams.delete("category");
-    }
-
-    setSearchParams(nextParams);
+    updateSearchParams({
+        category: value,
+        topic: "",
+        page: 0
+    });
 }
 
 function handleTopicChange(value) {
     setTopic(value);
     setCurrentPage(0);
+
+    updateSearchParams({
+        topic: value,
+        page: 0
+    });
 }
 
-    function handleDifficultyChange(value) {
-        setDifficulty(value);
-        setCurrentPage(0);
-    }
+function handleDifficultyChange(value) {
+    setDifficulty(value);
+    setCurrentPage(0);
 
-    function handleRetry() {
-        setReloadKey(currentValue => currentValue + 1);
-    }
+    updateSearchParams({
+        difficulty: value,
+        page: 0
+    });
+}
+
+function handlePageChange(page) {
+    setCurrentPage(page);
+
+    updateSearchParams({
+        page
+    });
+}
+
+function handleRetry() {
+    setReloadKey(currentValue => currentValue + 1);
+}
 
     return (
         <main className="bg-light min-vh-100 py-4 py-md-5">
@@ -213,7 +256,7 @@ function handleTopicChange(value) {
                         <Pagination
                             currentPage={currentPage}
                             totalPages={totalPages}
-                            onPageChange={setCurrentPage}
+                            onPageChange={handlePageChange}
                         />
                     )}
             </div>

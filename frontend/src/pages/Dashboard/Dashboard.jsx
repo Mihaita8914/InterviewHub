@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { getFavorites } from "../../api/FavoriteService";
 import { getRandomQuestion } from "../../api/QuestionService";
 import { QUESTION_CATEGORIES } from "../../constants/questionCategories";
+import { getLastPracticedQuestion, getProgressSummary, getCategoryProgress, getContinueQuestionByCategory } from "../../api/ProgressService";
 
 
 function Dashboard() {
@@ -11,51 +12,81 @@ function Dashboard() {
 
     const [favorites, setFavorites] = useState([]);
     const [lastPracticedQuestion, setLastPracticedQuestion] = useState(null);
+    const [progressSummary, setProgressSummary] = useState({
+    startedQuestions: 0,
+    completedQuestions: 0,
+    inProgressQuestions: 0,
+    completionPercentage: 0
+});
+    const [categoryProgress, setCategoryProgress] = useState([]);
     const [randomQuestion, setRandomQuestion] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [randomLoading, setRandomLoading] = useState(false);
     const [randomError, setRandomError] = useState("");
+    const navigate = useNavigate();
 
-useEffect(() => {
-    loadDashboard();
+    useEffect(() => {
+        loadDashboard();
+    }, []);
 
+
+async function handleContinueCategory(category) {
     try {
-        const savedQuestion = localStorage.getItem(
-            "interviewhub:lastPracticedQuestion"
-        );
+        const progress =
+            await getContinueQuestionByCategory(category);
 
-        if (savedQuestion) {
-            setLastPracticedQuestion(JSON.parse(savedQuestion));
+        console.log("CONTINUE RESPONSE", progress);
+
+        if (progress?.question?.id) {
+            navigate(`/questions/${progress.question.id}`);
+            return;
         }
-    } catch (storageError) {
-        console.error(
-            "The last practiced question could not be read.",
-            storageError
-        );
 
-        localStorage.removeItem(
-            "interviewhub:lastPracticedQuestion"
-        );
+        navigate(`/questions?category=${category}`);
+    } catch (error) {
+        console.error(error);
     }
-}, []);
+}
 
     async function loadDashboard() {
         try {
             setLoading(true);
             setError("");
 
-            const [favoritesResult, randomResult] =
-                await Promise.allSettled([
-                    getFavorites(),
-                    getRandomQuestion()
-                ]);
+            const [
+                favoritesResult,
+                randomResult,
+                progressSummaryResult,
+                lastPracticedResult,
+                categoryProgressResult
+            ] = await Promise.allSettled([
+                getFavorites(),
+                getRandomQuestion(),
+                getProgressSummary(),
+                getLastPracticedQuestion(),
+                getCategoryProgress()
+            ]);
 
             if (favoritesResult.status === "rejected") {
                 throw favoritesResult.reason;
             }
 
             setFavorites(favoritesResult.value);
+
+            if (progressSummaryResult.status === "fulfilled") {
+                setProgressSummary(progressSummaryResult.value);
+            }
+
+            if (lastPracticedResult.status === "fulfilled") {
+                setLastPracticedQuestion(
+                    lastPracticedResult.value?.question || null
+                );
+            }
+
+            if (categoryProgressResult.status === "fulfilled") {
+                setCategoryProgress(categoryProgressResult.value);
+            }
 
             if (randomResult.status === "fulfilled") {
                 setRandomQuestion(randomResult.value);
@@ -188,13 +219,11 @@ useEffect(() => {
                         <div className="card h-100 border-0 shadow-sm">
                             <div className="card-body p-4">
                                 <p className="text-secondary mb-2">
-                                    Practice suggestion
+                                    Completed questions
                                 </p>
 
-                                <p className="h3 fw-bold mb-0">
-                                    {randomQuestion
-                                        ? "Ready"
-                                        : "Unavailable"}
+                                <p className="display-5 fw-bold text-success mb-0">
+                                    {progressSummary.completedQuestions}
                                 </p>
                             </div>
                         </div>
@@ -204,16 +233,113 @@ useEffect(() => {
                         <div className="card h-100 border-0 shadow-sm">
                             <div className="card-body p-4">
                                 <p className="text-secondary mb-2">
-                                    Current plan
+                                    Started questions completed
                                 </p>
 
-                                <p className="h3 fw-bold mb-0">
-                                    Free Beta
+                                <p className="display-5 fw-bold mb-0">
+                                    {progressSummary.completionPercentage}%
                                 </p>
                             </div>
                         </div>
                     </div>
+
+                    <div className="alert alert-primary mb-4">
+                        <strong>{progressSummary.completedQuestions}</strong> completed
+                        {" · "}
+                        <strong>{progressSummary.inProgressQuestions}</strong> in progress
+                        {" · "}
+                        <strong>{progressSummary.startedQuestions}</strong> started
+                    </div>
                 </section>
+
+                <section className="card border-0 shadow-sm mb-4">
+    <div className="card-body p-4">
+        <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-4">
+            <div>
+                <h2 className="h4 fw-bold mb-1">
+                    Your progress by category
+                </h2>
+
+                <p className="text-secondary mb-0">
+                    Focus only on the technologies you want to study.
+                </p>
+            </div>
+        </div>
+
+        {categoryProgress.length === 0 ? (
+            <div className="text-center py-4">
+                <p className="text-secondary mb-3">
+                    You have not started any category yet.
+                </p>
+
+                <Link
+                    to="/questions"
+                    className="btn btn-primary"
+                >
+                    Start practicing
+                </Link>
+            </div>
+        ) : (
+            <div className="row g-4">
+                {categoryProgress.map(item => (
+                    <div
+                        key={item.category}
+                        className="col-12 col-md-6"
+                    >
+                        <div className="border rounded p-3 h-100">
+                            <div className="d-flex justify-content-between align-items-center mb-2">
+                                <h3 className="h6 fw-bold mb-0">
+                                    {item.category === "JAVA"
+                                        ? "Java Core"
+                                        : item.category}
+                                </h3>
+
+                                <span className="fw-semibold">
+                                    {item.completionPercentage}%
+                                </span>
+                            </div>
+
+                            <div
+                                className="progress mb-2"
+                                role="progressbar"
+                                aria-valuenow={item.completionPercentage}
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                            >
+                                <div
+                                    className="progress-bar"
+                                    style={{
+                                        width: `${item.completionPercentage}%`
+                                    }}
+                                />
+                            </div>
+
+                            <small className="text-secondary">
+                                {item.completedQuestions} completed
+                                {" · "}
+                                {item.inProgressQuestions} in progress
+                                {" · "}
+                                {item.startedQuestions} started
+                            </small>
+
+                            <div className="mt-3">
+                            <button
+                                type="button"
+                                className="btn btn-sm btn-outline-primary"
+                                onClick={() =>
+                                    handleContinueCategory(item.category)
+                                }
+                            >
+                                Continue
+                            </button>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        )}
+    </div>
+</section>
 
                 <section className="card border-0 shadow-sm mb-4">
     <div className="card-body p-4">
@@ -314,8 +440,7 @@ useEffect(() => {
                 </h2>
 
                 <p className="text-secondary">
-                    Open a question and it will appear here the next
-                    time you visit your dashboard.
+                    Open a question while logged in and it will appear here.
                 </p>
 
                 <Link
