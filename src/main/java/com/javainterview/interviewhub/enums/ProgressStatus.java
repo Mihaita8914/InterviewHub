@@ -1,4 +1,6 @@
 package com.javainterview.interviewhub.enums;
 
-public class ProgressStatus {
+public enum ProgressStatus {
+    IN_PROGRESS,
+    COMPLETED
 }

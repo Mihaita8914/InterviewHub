@@ -28,21 +28,26 @@ public interface QuestionRepository extends
 
     List<Question> findByCategory(Category category);
 
+    List<Question> findByCategoryAndPublishedTrueOrderByIdAsc(
+            Category category
+    );
+
     List<Question> findByDifficulty(Difficulty difficulty);
 
     List<Question> findByPublishedTrue();
 
     @Query(
             value = """
-                SELECT *
-                FROM questions
-                WHERE published = true
-                ORDER BY RANDOM()
-                LIMIT 1
-                """,
+            SELECT *
+            FROM questions
+            WHERE published = true
+            ORDER BY RANDOM()
+            LIMIT 1
+            """,
             nativeQuery = true
     )
     Optional<Question> findRandomPublishedQuestion();
+
     Optional<Question> findByIdAndPublishedTrue(Long id);
 
     Page<Question> findByCategoryAndDifficultyAndPublished(
