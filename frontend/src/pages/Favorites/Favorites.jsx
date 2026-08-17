@@ -58,30 +58,28 @@ function Favorites() {
     return (
         <main className="bg-light min-vh-100 py-4 py-md-5">
             <div className="container">
-                <section className="mb-4 mb-md-5">
-                    <div className="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-3">
-                        <div>
-                            <span className="badge text-bg-primary mb-2">
-                                Your learning list
-                            </span>
+                <section className="text-center mb-4 mb-md-5">
+                <div>
+                    <span className="badge text-bg-primary mb-3">
+                        YOUR LEARNING LIST
+                    </span>
 
-                            <h1 className="fw-bold mb-2">
-                                Favorite questions
-                            </h1>
+                    <h1 className="fw-bold mb-2">
+                        Favorite questions
+                    </h1>
 
-                            <p className="text-secondary mb-0">
-                                Save important questions and return to them
-                                whenever you want to practice.
-                            </p>
-                        </div>
+                    <p className="text-secondary mb-3">
+                        Keep important interview questions in one place
+                        and return to them whenever you want to review.
+                    </p>
 
-                        <Link
-                            to="/questions"
-                            className="btn btn-primary"
-                        >
-                            Browse questions
-                        </Link>
-                    </div>
+                    <Link
+                        to="/questions"
+                        className="btn btn-outline-primary"
+                    >
+                        Browse questions
+                    </Link>
+                </div>
                 </section>
 
                 {error && (
@@ -111,7 +109,7 @@ function Favorites() {
                 )}
 
                 {!loading && favorites.length === 0 && (
-                    <div className="card border-0 shadow-sm">
+                    <div className="card border-0 shadow-sm rounded-4">
                         <div className="card-body text-center p-4 p-md-5">
                             <div
                                 className="display-4 text-primary mb-3"
@@ -151,20 +149,35 @@ function Favorites() {
                                     className="col-12 col-lg-6"
                                     key={favorite.id}
                                 >
-                                    <article className="card h-100 border-0 shadow-sm">
-                                        <div className="card-body d-flex flex-column p-4">
+                                    <article className="card h-100 border-0 shadow-sm rounded-4">
+                                        <div className="card-body d-flex flex-column p-4 p-md-4">
                                             <div className="d-flex flex-wrap gap-2 mb-3">
                                                 <span className="badge text-bg-primary">
-                                                    {question.category}
+                                                    {question.category === "JAVA"
+                                                    ? "Java Core"
+                                                    : question.category}
                                                 </span>
 
-                                                <span className="badge text-bg-warning">
-                                                    {question.difficulty}
-                                                </span>
+                                            <span
+                                                className={
+                                                    question.difficulty === "EASY"
+                                                        ? "badge text-bg-success"
+                                                        : question.difficulty === "HARD"
+                                                            ? "badge text-bg-danger"
+                                                            : "badge text-bg-warning"
+                                                }
+                                            >
+                                                {question.difficulty}
+                                            </span>
                                             </div>
 
-                                            <h2 className="h4 fw-bold">
-                                                {question.title}
+                                            <h2 className="h4 fw-bold mb-2">
+                                                <Link
+                                                    to={`/questions/${question.id}`}
+                                                    className="text-dark text-decoration-none"
+                                                >
+                                                    {question.title}
+                                                </Link>
                                             </h2>
 
                                             <p className="text-secondary flex-grow-1">
@@ -172,7 +185,7 @@ function Favorites() {
                                             </p>
 
                                             <small className="text-secondary mb-3">
-                                                Saved on{" "}
+                                                ♡ Saved{" "}
                                                 {new Date(
                                                     favorite.createdAt
                                                 ).toLocaleDateString()}

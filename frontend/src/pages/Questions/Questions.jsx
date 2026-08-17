@@ -23,6 +23,7 @@ function Questions() {
     const [difficulty, setDifficulty] = useState(difficultyFromUrl);
     const [currentPage, setCurrentPage] = useState(pageFromUrl);
     const [totalPages, setTotalPages] = useState(0);
+    const [totalElements, setTotalElements] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [reloadKey, setReloadKey] = useState(0);
@@ -46,16 +47,18 @@ function Questions() {
                     return;
                 }
 
-                setQuestions(data.content);
-                setTotalPages(data.totalPages);
+            setQuestions(data.content || []);
+            setTotalPages(data.totalPages || 0);
+            setTotalElements(data.totalElements || 0);
             })
             .catch(requestError => {
                 if (!active) {
                     return;
                 }
 
-                setQuestions([]);
-                setTotalPages(0);
+            setQuestions([]);
+            setTotalPages(0);
+            setTotalElements(0);
 
                 setError(
                     requestError.response?.data?.error ||
@@ -80,7 +83,15 @@ function Questions() {
         reloadKey
     ]);
 
+    function handleClearFilters() {
+        setSearchTerm("");
+        setCategory("");
+        setTopic("");
+        setDifficulty("");
+        setCurrentPage(0);
 
+        setSearchParams({});
+    }
     function updateSearchParams(changes) {
     const nextParams = new URLSearchParams(searchParams);
 
@@ -153,7 +164,14 @@ function handleRetry() {
     setReloadKey(currentValue => currentValue + 1);
 }
 
+        const hasActiveFilters =
+            Boolean(category || topic || difficulty || searchTerm);
+
+        const hasPracticeFilters =
+            Boolean(category || topic || difficulty);
+
     function handleStartPractice() {
+
         const params = new URLSearchParams();
 
         if (category) {
@@ -217,7 +235,9 @@ function handleRetry() {
                                 className="btn btn-primary"
                                 onClick={handleStartPractice}
                             >
-                                Start Practice
+                                {hasActiveFilters
+                                    ? "Start Practice"
+                                    : "Practice All Questions"}
                             </button>
                         </div>
                     </div>
@@ -254,6 +274,31 @@ function handleRetry() {
                         <p className="text-secondary mt-3">
                             Loading questions...
                         </p>
+                    </div>
+                )}
+
+                {!loading && !error && (
+                    <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mb-3">
+                        <div>
+                            <span className="fw-semibold">
+                                {totalElements}{" "}
+                                {totalElements === 1 ? "question" : "questions"}
+                            </span>
+
+                            <span className="text-secondary ms-1">
+                                found
+                            </span>
+                        </div>
+
+                        {hasActiveFilters && (
+                            <button
+                                type="button"
+                                className="btn btn-sm btn-link text-decoration-none p-0"
+                                onClick={handleClearFilters}
+                            >
+                                Clear filters
+                            </button>
+                        )}
                     </div>
                 )}
 

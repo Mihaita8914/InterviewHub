@@ -167,39 +167,103 @@ async function handleContinueCategory(category) {
     return (
         <main className="bg-light min-vh-100 py-4 py-md-5">
             <div className="container">
-                <section className="card border-0 bg-dark text-white shadow-sm mb-4">
-                    <div className="card-body p-4 p-md-5">
-                        <span className="badge text-bg-primary mb-3">
-                            InterviewHub Dashboard
+                <section className="card border-0 bg-dark text-white shadow-sm rounded-4 overflow-hidden mb-4">
+    <div className="card-body p-4 p-md-5">
+        <div className="row align-items-center g-4">
+
+            <div className="col-12 col-lg-7">
+                <span className="badge text-bg-primary mb-3">
+                    YOUR PREPARATION WORKSPACE
+                </span>
+
+                <h1 className="display-6 fw-bold mb-3">
+                    Welcome back,{" "}
+                    {user?.username || "Developer"}!
+                </h1>
+
+                <p className="text-white-50 fs-5 mb-4">
+                    Keep building confidence for your next
+                    Java backend interview.
+                </p>
+
+                <div className="d-flex flex-column flex-sm-row gap-2">
+                    <Link
+                        to="/questions"
+                        className="btn btn-primary"
+                    >
+                        Practice questions
+                    </Link>
+
+                    <Link
+                        to="/favorites"
+                        className="btn btn-outline-light"
+                    >
+                        View favorites
+                    </Link>
+                </div>
+            </div>
+
+            <div className="col-12 col-lg-5">
+                <div className="bg-white bg-opacity-10 rounded-4 p-4">
+                    <div className="d-flex justify-content-between align-items-center mb-2">
+                        <span className="text-white-50">
+                            Practice completion
                         </span>
 
-                        <h1 className="display-6 fw-bold">
-                            Welcome back,{" "}
-                            {user?.username || "Developer"}!
-                        </h1>
+                        <strong className="fs-4">
+                            {progressSummary.completionPercentage}%
+                        </strong>
+                    </div>
 
-                        <p className="text-white-50 mb-4">
-                            Continue preparing for your next Java
-                            interview.
-                        </p>
+                    <div
+                        className="progress mb-3"
+                        style={{ height: "8px" }}
+                    >
+                        <div
+                            className="progress-bar"
+                            style={{
+                                width: `${progressSummary.completionPercentage}%`
+                            }}
+                        />
+                    </div>
 
-                        <div className="d-flex flex-column flex-sm-row gap-2">
-                            <Link
-                                to="/questions"
-                                className="btn btn-primary"
-                            >
-                                Practice questions
-                            </Link>
+                    <div className="d-flex justify-content-between gap-3">
+                        <div>
+                            <div className="fw-bold fs-4">
+                                {progressSummary.completedQuestions}
+                            </div>
 
-                            <Link
-                                to="/favorites"
-                                className="btn btn-outline-light"
-                            >
-                                View favorites
-                            </Link>
+                            <small className="text-white-50">
+                                Completed
+                            </small>
+                        </div>
+
+                        <div>
+                            <div className="fw-bold fs-4">
+                                {progressSummary.inProgressQuestions}
+                            </div>
+
+                            <small className="text-white-50">
+                                In progress
+                            </small>
+                        </div>
+
+                        <div>
+                            <div className="fw-bold fs-4">
+                                {favorites.length}
+                            </div>
+
+                            <small className="text-white-50">
+                                Saved
+                            </small>
                         </div>
                     </div>
-                </section>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
 
                 {error && (
                     <div
@@ -218,57 +282,6 @@ async function handleContinueCategory(category) {
                     </div>
                 )}
 
-                <section className="row g-3 mb-4">
-                    <div className="col-12 col-md-4">
-                        <div className="card h-100 border-0 shadow-sm">
-                            <div className="card-body p-4">
-                                <p className="text-secondary mb-2">
-                                    Saved questions
-                                </p>
-
-                                <p className="display-5 fw-bold text-primary mb-0">
-                                    {favorites.length}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="col-12 col-md-4">
-                        <div className="card h-100 border-0 shadow-sm">
-                            <div className="card-body p-4">
-                                <p className="text-secondary mb-2">
-                                    Completed questions
-                                </p>
-
-                                <p className="display-5 fw-bold text-success mb-0">
-                                    {progressSummary.completedQuestions}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="col-12 col-md-4">
-                        <div className="card h-100 border-0 shadow-sm">
-                            <div className="card-body p-4">
-                                <p className="text-secondary mb-2">
-                                    Started questions completed
-                                </p>
-
-                                <p className="display-5 fw-bold mb-0">
-                                    {progressSummary.completionPercentage}%
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="alert alert-primary mb-4">
-                        <strong>{progressSummary.completedQuestions}</strong> completed
-                        {" · "}
-                        <strong>{progressSummary.inProgressQuestions}</strong> in progress
-                        {" · "}
-                        <strong>{progressSummary.startedQuestions}</strong> started
-                    </div>
-                </section>
 
                 <section className="card border-0 shadow-sm mb-4">
     <div className="card-body p-4">
@@ -382,6 +395,73 @@ async function handleContinueCategory(category) {
     </div>
 </section>
 
+<section className="card border-0 shadow-sm mb-4">
+    <div className="card-body p-4">
+        <span className="badge text-bg-success mb-3">
+            Continue practicing
+        </span>
+
+        {lastPracticedQuestion ? (
+            <>
+                <h2 className="h3 fw-bold">
+                    {lastPracticedQuestion.title}
+                </h2>
+
+                <div className="d-flex flex-wrap gap-2 mb-3">
+                    <span className="badge text-bg-primary">
+                        {lastPracticedQuestion.category === "JAVA"
+                            ? "Java Core"
+                            : lastPracticedQuestion.category}
+                    </span>
+
+                    {lastPracticedQuestion.topic && (
+                        <span className="badge text-bg-info">
+                            {lastPracticedQuestion.topic}
+                        </span>
+                    )}
+
+                    <span className="badge text-bg-secondary">
+                        {lastPracticedQuestion.difficulty}
+                    </span>
+                </div>
+
+                <p className="text-secondary">
+                    {lastPracticedQuestion.question}
+                </p>
+
+                <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={() =>
+                        handleContinueCategory(
+                            lastPracticedQuestion.category
+                        )
+                    }
+                >
+                    Continue practice
+                </button>
+            </>
+        ) : (
+            <>
+                <h2 className="h4 fw-bold">
+                    Start your first practice session
+                </h2>
+
+                <p className="text-secondary">
+                    Open a question while logged in and it will appear here.
+                </p>
+
+                <Link
+                    to="/questions"
+                    className="btn btn-outline-primary"
+                >
+                    Browse questions
+                </Link>
+            </>
+        )}
+    </div>
+</section>
+
                 <section className="card border-0 shadow-sm mb-4">
     <div className="card-body p-4">
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-4">
@@ -439,66 +519,6 @@ async function handleContinueCategory(category) {
                     </div>
                 ))}
             </div>
-        )}
-    </div>
-</section>
-
-<section className="card border-0 shadow-sm mb-4">
-    <div className="card-body p-4">
-        <span className="badge text-bg-success mb-3">
-            Continue practicing
-        </span>
-
-        {lastPracticedQuestion ? (
-            <>
-                <h2 className="h3 fw-bold">
-                    {lastPracticedQuestion.title}
-                </h2>
-
-                <div className="d-flex flex-wrap gap-2 mb-3">
-                    <span className="badge text-bg-primary">
-                        {lastPracticedQuestion.category}
-                    </span>
-
-                    {lastPracticedQuestion.topic && (
-                        <span className="badge text-bg-info">
-                            {lastPracticedQuestion.topic}
-                        </span>
-                    )}
-
-                    <span className="badge text-bg-secondary">
-                        {lastPracticedQuestion.difficulty}
-                    </span>
-                </div>
-
-                <p className="text-secondary">
-                    {lastPracticedQuestion.question}
-                </p>
-
-                <Link
-                    to={`/questions/${lastPracticedQuestion.id}`}
-                    className="btn btn-primary"
-                >
-                    Continue question
-                </Link>
-            </>
-        ) : (
-            <>
-                <h2 className="h4 fw-bold">
-                    Start your first practice session
-                </h2>
-
-                <p className="text-secondary">
-                    Open a question while logged in and it will appear here.
-                </p>
-
-                <Link
-                    to="/questions"
-                    className="btn btn-outline-primary"
-                >
-                    Browse questions
-                </Link>
-            </>
         )}
     </div>
 </section>

@@ -51,27 +51,41 @@ function ResetPassword() {
     }
 
     return (
-        <div className="container py-5">
+    <main className="bg-light min-vh-100 py-5">
+        <div className="container">
             <div className="row justify-content-center">
                 <div className="col-md-7 col-lg-5">
-                    <div className="card shadow-sm border-0">
-                        <div className="card-body p-4">
-                            <h1 className="h3 text-center mb-3">
-                                Reset password
-                            </h1>
+                    <div className="card shadow-sm border-0 rounded-4">
+                        <div className="card-body p-4 p-md-5">
 
-                            <p className="text-muted text-center mb-4">
-                                Choose a new password for your account.
-                            </p>
+                            <div className="text-center mb-4">
+                                <span className="badge text-bg-primary mb-3">
+                                    PASSWORD RESET
+                                </span>
+
+                                <h1 className="h2 fw-bold mb-2">
+                                    Choose a new password
+                                </h1>
+
+                                <p className="text-secondary mb-0">
+                                    Enter a new password for your InterviewHub account.
+                                </p>
+                            </div>
 
                             {message && (
-                                <div className="alert alert-success">
+                                <div
+                                    className="alert alert-success"
+                                    role="alert"
+                                >
                                     {message}
                                 </div>
                             )}
 
                             {error && (
-                                <div className="alert alert-danger">
+                                <div
+                                    className="alert alert-danger"
+                                    role="alert"
+                                >
                                     {error}
                                 </div>
                             )}
@@ -89,18 +103,26 @@ function ResetPassword() {
                                         <input
                                             id="newPassword"
                                             type="password"
-                                            className="form-control"
+                                            className="form-control form-control-lg"
                                             value={newPassword}
                                             onChange={event =>
-                                                setNewPassword(event.target.value)
+                                                setNewPassword(
+                                                    event.target.value
+                                                )
                                             }
+                                            placeholder="Enter a new password"
                                             minLength={8}
+                                            autoComplete="new-password"
                                             required
                                             disabled={loading || !token}
                                         />
+
+                                        <div className="form-text">
+                                            Minimum 8 characters.
+                                        </div>
                                     </div>
 
-                                    <div className="mb-3">
+                                    <div className="mb-4">
                                         <label
                                             htmlFor="confirmPassword"
                                             className="form-label"
@@ -111,14 +133,16 @@ function ResetPassword() {
                                         <input
                                             id="confirmPassword"
                                             type="password"
-                                            className="form-control"
+                                            className="form-control form-control-lg"
                                             value={confirmPassword}
                                             onChange={event =>
                                                 setConfirmPassword(
                                                     event.target.value
                                                 )
                                             }
+                                            placeholder="Repeat your new password"
                                             minLength={8}
+                                            autoComplete="new-password"
                                             required
                                             disabled={loading || !token}
                                         />
@@ -126,7 +150,7 @@ function ResetPassword() {
 
                                     <button
                                         type="submit"
-                                        className="btn btn-primary w-100"
+                                        className="btn btn-primary btn-lg w-100"
                                         disabled={loading || !token}
                                     >
                                         {loading
@@ -137,16 +161,21 @@ function ResetPassword() {
                             )}
 
                             <div className="text-center mt-4">
-                                <Link to="/login">
-                                    Back to login
+                                <Link
+                                    to="/login"
+                                    className="text-decoration-none"
+                                >
+                                    ← Back to login
                                 </Link>
                             </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    );
+    </main>
+);
 }
 
 export default ResetPassword;

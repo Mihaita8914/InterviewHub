@@ -104,7 +104,7 @@ function Register() {
                 className="container"
                 style={{ maxWidth: "520px" }}
             >
-                <div className="card border-0 shadow-sm">
+                <div className="card border-0 shadow-sm rounded-4">
                     <div className="card-body p-4 p-md-5">
                         <div className="text-center mb-4">
                             <span className="badge text-bg-primary mb-3">
@@ -116,8 +116,8 @@ function Register() {
                             </h1>
 
                             <p className="text-secondary mb-0">
-                                Save questions and organize your Java
-                                interview preparation.
+                                Practice Java backend interview questions,
+                                track your progress and continue where you left off.
                             </p>
                         </div>
 
@@ -143,7 +143,8 @@ function Register() {
                                     id="username"
                                     name="username"
                                     type="text"
-                                    className="form-control"
+                                    className="form-control form-control-lg"
+                                    placeholder="Choose a username"
                                     value={formData.username}
                                     onChange={handleChange}
                                     minLength={3}
@@ -166,7 +167,8 @@ function Register() {
                                     id="email"
                                     name="email"
                                     type="email"
-                                    className="form-control"
+                                    className="form-control form-control-lg"
+                                    placeholder="you@example.com"
                                     value={formData.email}
                                     onChange={handleChange}
                                     autoComplete="email"
@@ -187,7 +189,8 @@ function Register() {
                                     id="password"
                                     name="password"
                                     type="password"
-                                    className="form-control"
+                                    className="form-control form-control-lg"
+                                    placeholder="Create a password"
                                     value={formData.password}
                                     onChange={handleChange}
                                     minLength={6}
@@ -213,7 +216,8 @@ function Register() {
                                     id="confirmPassword"
                                     name="confirmPassword"
                                     type="password"
-                                    className="form-control"
+                                    className="form-control form-control-lg"
+                                    placeholder="Repeat your password"
                                     value={
                                         formData.confirmPassword
                                     }
@@ -227,16 +231,22 @@ function Register() {
 
                             <button
                                 type="submit"
-                                className="btn btn-primary w-100 py-2"
+                                className="btn btn-primary btn-lg w-100"
                                 disabled={loading}
                             >
                                 {loading
                                     ? "Creating account..."
                                     : "Create free account"}
                             </button>
+
+                            <div className="text-center mt-3">
+                                <small className="text-secondary">
+                                        Free during public beta · No credit card required
+                                </small>
+                            </div>
                         </form>
 
-                        <p className="text-center text-secondary mt-4 mb-0">
+                        <p className="text-center text-secondary mt-3 mb-0">
                             Already have an account?{" "}
                             <Link to="/login">
                                 Login

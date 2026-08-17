@@ -28,29 +28,44 @@ function ForgotPassword() {
             .finally(() => setLoading(false));
     }
 
-    return (
-        <div className="container py-5">
+return (
+    <main className="bg-light min-vh-100 py-5">
+        <div className="container">
             <div className="row justify-content-center">
                 <div className="col-md-7 col-lg-5">
-                    <div className="card shadow-sm border-0">
-                        <div className="card-body p-4">
-                            <h1 className="h3 text-center mb-3">
-                                Forgot password?
-                            </h1>
+                    <div className="card shadow-sm border-0 rounded-4">
+                        <div className="card-body p-4 p-md-5">
 
-                            <p className="text-muted text-center mb-4">
-                                Enter your email address and we will send you
-                                a link to reset your password.
-                            </p>
+                            <div className="text-center mb-4">
+                                <span className="badge text-bg-primary mb-3">
+                                    PASSWORD RECOVERY
+                                </span>
+
+                                <h1 className="h2 fw-bold mb-2">
+                                    Forgot your password?
+                                </h1>
+
+                                <p className="text-secondary mb-0">
+                                    Enter your email address and we&apos;ll
+                                    send you a secure link to choose a new
+                                    password.
+                                </p>
+                            </div>
 
                             {message && (
-                                <div className="alert alert-success">
+                                <div
+                                    className="alert alert-success"
+                                    role="alert"
+                                >
                                     {message}
                                 </div>
                             )}
 
                             {error && (
-                                <div className="alert alert-danger">
+                                <div
+                                    className="alert alert-danger"
+                                    role="alert"
+                                >
                                     {error}
                                 </div>
                             )}
@@ -67,12 +82,13 @@ function ForgotPassword() {
                                     <input
                                         id="email"
                                         type="email"
-                                        className="form-control"
+                                        className="form-control form-control-lg"
                                         value={email}
                                         onChange={event =>
                                             setEmail(event.target.value)
                                         }
                                         placeholder="you@example.com"
+                                        autoComplete="email"
                                         required
                                         disabled={loading}
                                     />
@@ -80,7 +96,7 @@ function ForgotPassword() {
 
                                 <button
                                     type="submit"
-                                    className="btn btn-primary w-100"
+                                    className="btn btn-primary btn-lg w-100"
                                     disabled={loading}
                                 >
                                     {loading
@@ -90,16 +106,21 @@ function ForgotPassword() {
                             </form>
 
                             <div className="text-center mt-4">
-                                <Link to="/login">
-                                    Back to login
+                                <Link
+                                    to="/login"
+                                    className="text-decoration-none"
+                                >
+                                    ← Back to login
                                 </Link>
                             </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    );
+    </main>
+);
 }
 
 export default ForgotPassword;

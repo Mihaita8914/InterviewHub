@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { QUESTION_CATEGORIES } from "../../constants/questionCategories";
+import "./Home.css";
 
 function Home() {
     const navigate = useNavigate();
@@ -10,50 +11,50 @@ function Home() {
     const benefits = [
         {
             number: "01",
-            title: "Real interview topics",
+            title: "Practice like a real interview",
             description:
-                "Practice Java, Spring Boot, SQL and backend questions organized by category and difficulty."
+                "Think about your answer first, reveal the explanation only when you are ready, and move through focused Java backend practice sessions."
         },
         {
             number: "02",
-            title: "Build your study list",
+            title: "Know exactly where you stand",
             description:
-                "Save important questions to Favorites and return to them whenever you want to practice."
+                "Track completed questions, category progress and unfinished topics from your personal dashboard."
         },
         {
             number: "03",
-            title: "Personal dashboard",
+            title: "Continue exactly where you stopped",
             description:
-                "See your saved questions and receive a new practice suggestion from one central place."
+                "Resume unfinished practice sessions, review completed categories and save important questions for later."
         }
     ];
 
-    const steps = [
-        {
-            number: "1",
-            title: "Create your account",
-            description:
-                "Join the public beta for free. No payment information is required."
-        },
-        {
-            number: "2",
-            title: "Choose a topic",
-            description:
-                "Search and filter questions by category and difficulty."
-        },
-        {
-            number: "3",
-            title: "Save important questions",
-            description:
-                "Create a personal list with the questions you want to review."
-        },
-        {
-            number: "4",
-            title: "Continue from Dashboard",
-            description:
-                "Return to your saved questions and continue practicing."
-        }
-    ];
+        const steps = [
+            {
+                number: "1",
+                title: "Choose what to study",
+                description:
+                    "Filter Java backend questions by technology, topic and difficulty."
+            },
+            {
+                number: "2",
+                title: "Enter Practice Mode",
+                description:
+                    "Answer the question yourself before revealing the prepared explanation."
+            },
+            {
+                number: "3",
+                title: "Track your progress",
+                description:
+                    "Mark questions as completed and see your real progress across each category."
+            },
+            {
+                number: "4",
+                title: "Continue or review",
+                description:
+                    "Resume unfinished learning exactly where you stopped or review completed categories."
+            }
+        ];
 
     function handlePrimaryAction() {
         navigate(
@@ -68,23 +69,25 @@ function Home() {
             <section className="bg-dark text-white py-5">
                 <div className="container py-4 py-md-5">
                     <div className="row align-items-center g-5">
-                        <div className="col-12 col-lg-7">
+                        <div className="col-12 col-lg-7 pe-lg-5">
                             <span className="badge text-bg-primary px-3 py-2 mb-3">
                                 FREE PUBLIC BETA
                             </span>
 
-                            <h1 className="display-3 fw-bold mb-4">
-                                Ace your next{" "}
+                                <h1
+                                   className="display-3 fw-bold mb-4"
+                                   style={{ maxWidth: "760px" }}
+                                >
+                                Prepare smarter for your next{" "}
                                 <span className="text-primary">
-                                    Java interview
+                                    Java backend interview
                                 </span>
                             </h1>
 
-                            <p className="lead text-white-50 mb-4">
-                                Practice real Java backend interview
-                                questions, save the important ones and
-                                organize your preparation from a personal
-                                dashboard.
+                            <p className="lead text-white-50 mb-4" style={{ maxWidth: "680px" }}>
+                                Practice Java, Spring, SQL and backend interview
+                                questions in focused sessions, track your progress
+                                and continue exactly where you left off.
                             </p>
 
                             <div className="d-flex flex-column flex-sm-row gap-3">
@@ -116,8 +119,8 @@ function Home() {
                         </div>
 
                         <div className="col-12 col-lg-5">
-                            <div className="card border-0 shadow-lg">
-                                <div className="card-body p-4 p-md-5 text-dark">
+                            <div className="card border-0 shadow-lg rounded-4">
+                                <div className="card-body p-4 text-dark">
                                     <div className="d-flex justify-content-between align-items-start gap-3 mb-4">
                                         <div>
                                             <small className="text-secondary">
@@ -135,37 +138,36 @@ function Home() {
                                     </div>
 
                                     <div className="list-group list-group-flush">
-                                        <div className="list-group-item px-0 py-3">
-                                            <strong className="d-block">
-                                                Browse interview questions
-                                            </strong>
+                                    <div className="list-group-item px-0 py-3">
+                                        <strong className="d-block">
+                                            Focused Practice Mode
+                                        </strong>
 
-                                            <small className="text-secondary">
-                                                Search by topic and difficulty
-                                            </small>
-                                        </div>
-
-                                        <div className="list-group-item px-0 py-3">
-                                            <strong className="d-block">
-                                                Save your favorites
-                                            </strong>
-
-                                            <small className="text-secondary">
-                                                Build a personal practice list
-                                            </small>
-                                        </div>
-
-                                        <div className="list-group-item px-0 py-3">
-                                            <strong className="d-block">
-                                                Continue practicing
-                                            </strong>
-
-                                            <small className="text-secondary">
-                                                Receive a random question
-                                                suggestion
-                                            </small>
-                                        </div>
+                                        <small className="text-secondary">
+                                            Think first, then reveal the answer
+                                        </small>
                                     </div>
+
+                                    <div className="list-group-item px-0 py-3">
+                                        <strong className="d-block">
+                                            Track real progress
+                                        </strong>
+
+                                        <small className="text-secondary">
+                                            See completion by technology and category
+                                        </small>
+                                    </div>
+
+                                    <div className="list-group-item px-0 py-3">
+                                        <strong className="d-block">
+                                            Continue where you stopped
+                                        </strong>
+
+                                        <small className="text-secondary">
+                                            Resume unfinished practice at the right question
+                                        </small>
+                                    </div>
+                                </div>
 
                                     <button
                                         type="button"
@@ -187,11 +189,11 @@ function Home() {
                 <div className="container py-4">
                     <div className="text-center mb-5">
                         <span className="text-primary fw-bold">
-                            CURRENT V1 FEATURES
+                            BUILT FOR INTERVIEW PREPARATION
                         </span>
 
                         <h2 className="display-6 fw-bold mt-2">
-                            Everything you need to start preparing
+                            A focused way to prepare, practice and improve
                         </h2>
 
                         <p
@@ -209,11 +211,17 @@ function Home() {
                                 className="col-12 col-md-4"
                                 key={benefit.number}
                             >
-                                <div className="card h-100 border-0 shadow-sm">
+                                <div className="card h-100 border-0 shadow-sm rounded-4">
                                     <div className="card-body p-4">
-                                        <span className="badge text-bg-primary mb-3">
-                                            {benefit.number}
-                                        </span>
+                                    <div
+                                        className="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center fw-bold mb-4"
+                                        style={{
+                                            width: "44px",
+                                            height: "44px"
+                                        }}
+                                    >
+                                        {benefit.number}
+                                    </div>
 
                                         <h3 className="h4 fw-bold">
                                             {benefit.title}
@@ -241,20 +249,38 @@ function Home() {
                         commonly discussed in Java backend interviews.
                     </p>
 
-                    <div className="d-flex flex-wrap justify-content-center gap-3">
+                    <div className="row g-3 justify-content-center">
                         {QUESTION_CATEGORIES.map(category => (
-                            <button
+                            <div
                                 key={category.value}
-                                type="button"
-                                className="btn btn-dark rounded-pill fs-6 px-4 py-3"
-                                onClick={() =>
-                                    navigate(
-                                        `/questions?category=${category.value}`
-                                    )
-                                }
+                                className="col-12 col-sm-6 col-lg-4"
                             >
-                                {category.label}
-                            </button>
+                                <button
+                                    type="button"
+                                    className="card h-100 w-100 border-0 shadow-sm text-start category-card"
+                                    onClick={() =>
+                                        navigate(
+                                            `/questions?category=${category.value}`
+                                        )
+                                    }
+                                >
+                                    <div className="card-body p-4 p-lg-5">
+                                        <div className="d-flex justify-content-between align-items-start gap-3 mb-2">
+                                            <h3 className="h5 fw-bold mb-0">
+                                                {category.label}
+                                            </h3>
+
+                                            <span className="text-primary fw-bold">
+                                                →
+                                            </span>
+                                        </div>
+
+                                        <p className="text-secondary small mb-0">
+                                            {category.shortDescription}
+                                        </p>
+                                    </div>
+                                </button>
+                            </div>
                         ))}
                     </div>
                 </div>
@@ -312,8 +338,8 @@ function Home() {
                     </h2>
 
                     <p className="lead mb-4">
-                        Join the free public beta and build your personal
-                        interview preparation list.
+                            Practice real interview questions, track your progress
+                            and build confidence for your next Java backend interview.
                     </p>
 
                     <button
@@ -327,25 +353,6 @@ function Home() {
                     </button>
                 </div>
             </section>
-
-            <footer className="bg-dark text-white py-4">
-                <div className="container">
-                    <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 text-center text-md-start">
-                        <div>
-                            <strong>InterviewHub</strong>
-
-                            <span className="text-secondary ms-2">
-                                Java interview preparation
-                            </span>
-                        </div>
-
-                        <div className="text-secondary">
-                            © {new Date().getFullYear()} InterviewHub.
-                            All rights reserved.
-                        </div>
-                    </div>
-                </div>
-            </footer>
         </main>
     );
 }

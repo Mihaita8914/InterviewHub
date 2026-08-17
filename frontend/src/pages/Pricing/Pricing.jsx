@@ -6,12 +6,14 @@ function Pricing() {
     const { isAuthenticated } = useAuth();
 
     const freeFeatures = [
-        "Java interview questions and detailed answers",
-        "Search by keyword",
-        "Category and difficulty filters",
+        "Java backend interview questions and detailed answers",
+        "Focused Practice Mode",
+        "Progress tracking by category",
+        "Continue where you left off",
+        "Search and advanced filters",
         "Save favorite questions",
-        "Personalized user dashboard",
-        "Responsive access from desktop and mobile"
+        "Personalized dashboard",
+        "Desktop and mobile access"
     ];
 
     const futurePlans = [
@@ -20,10 +22,10 @@ function Pricing() {
             description:
                 "A structured preparation experience for serious candidates.",
             features: [
-                "Progress tracking",
                 "Personal notes",
                 "Structured learning paths",
-                "Advanced practice statistics"
+                "Advanced practice statistics",
+                "Custom practice sessions"
             ]
         },
         {
@@ -87,7 +89,7 @@ function Pricing() {
             <section className="bg-light py-5">
                 <div className="container py-4">
                     <div
-                        className="card border-primary border-2 shadow-sm mx-auto"
+                        className="card border-primary border-2 shadow-sm rounded-4 overflow-hidden mx-auto"
                         style={{ maxWidth: "900px" }}
                     >
                         <div className="card-header bg-primary text-white text-center fw-semibold py-3">
@@ -108,8 +110,8 @@ function Pricing() {
                                     </div>
 
                                     <p className="text-secondary">
-                                        Full access to the current V1
-                                        functionality during the public beta.
+                                        Full access to all features currently available
+                                        during the public beta.
                                     </p>
                                 </div>
 
@@ -155,11 +157,12 @@ function Pricing() {
                         </span>
 
                         <h2 className="fw-bold">
-                            More features are planned
+                            What's coming next
                         </h2>
 
                         <p className="text-secondary">
-                            These plans are not available for purchase yet.
+                            We're building more ways to make interview preparation
+                            structured, measurable and personalized.
                         </p>
                     </div>
 
@@ -169,7 +172,7 @@ function Pricing() {
                                 className="col-12 col-lg-5"
                                 key={plan.name}
                             >
-                                <div className="card h-100 border-0 shadow-sm">
+                                <div className="card h-100 border-0 shadow-sm rounded-4">
                                     <div className="card-body p-4">
                                         <div className="d-flex justify-content-between align-items-center mb-3">
                                             <h3 className="h3 fw-bold mb-0">

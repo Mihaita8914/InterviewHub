@@ -205,8 +205,16 @@ async function handleMarkCompleted() {
 
     return (
         <main className="bg-light min-vh-100 py-4 py-md-5">
-            <div className="container">
-                <article className="card border-0 shadow-sm">
+                        <div className="container">
+                                <div className="mb-3">
+                    <Link
+                        to={backToQuestions}
+                        className="text-decoration-none text-secondary fw-semibold"
+                    >
+                        ← Back to questions
+                    </Link>
+                </div>
+                <article className="card border-0 shadow-sm rounded-4 overflow-hidden">
                     <div className="card-body p-4 p-md-5">
                         <div className="d-flex flex-column flex-md-row justify-content-between gap-4 mb-4">
                             <div>
@@ -223,9 +231,17 @@ async function handleMarkCompleted() {
                                         </span>
                                     )}
 
-                                    <span className="badge text-bg-warning">
-                                        {formatLabel(question.difficulty)}
-                                    </span>
+                                        <span
+                                            className={
+                                                question.difficulty === "EASY"
+                                                    ? "badge text-bg-success"
+                                                    : question.difficulty === "HARD"
+                                                        ? "badge text-bg-danger"
+                                                        : "badge text-bg-warning"
+                                            }
+                                        >
+                                            {question.difficulty}
+                                        </span>
                                 </div>
 
                                 <h1 className="fw-bold mb-0">
@@ -274,20 +290,34 @@ async function handleMarkCompleted() {
 
                         <hr />
 
-                        <section className="py-3">
-                            <h2 className="h4 fw-bold">
-                                Question
-                            </h2>
+                        <section className="py-4">
+                            <div className="bg-light rounded-4 p-4">
+                                <span className="text-primary text-uppercase fw-bold small">
+                                    Interview Question
+                                </span>
 
-                            <p className="text-secondary mb-0">
-                                {question.question}
-                            </p>
+                                <p className="fs-5 fw-semibold mt-2 mb-0">
+                                    {question.question}
+                                </p>
+                            </div>
                         </section>
 
                         <section className="py-3">
-                            <h2 className="h4 fw-bold">
-                                Answer
-                            </h2>
+                            <div className="d-flex align-items-center gap-2 mb-3">
+                                <span
+                                    className="bg-success-subtle text-success rounded-circle d-inline-flex align-items-center justify-content-center fw-bold"
+                                    style={{
+                                        width: "32px",
+                                        height: "32px"
+                                    }}
+                                >
+                                    ✓
+                                </span>
+
+                                <h2 className="h4 fw-bold mb-0">
+                                    Answer
+                                </h2>
+                            </div>
 
                             <div
                                 className="rich-text-display text-secondary"
@@ -317,7 +347,7 @@ async function handleMarkCompleted() {
                                     Common Mistakes
                                 </h2>
 
-                                <div className="alert alert-warning mb-0">
+                                <div className="alert alert-warning border-0 rounded-4 mb-0">
                                     <div className="question-multiline-text">
                                         {question.commonMistakes}
                                     </div>
@@ -346,14 +376,14 @@ async function handleMarkCompleted() {
                             </section>
                         )}
 
-                        <div className="mt-4">
+                        <div className="d-flex flex-column flex-sm-row gap-2 mt-4 pt-4 border-top">
                         {isAuthenticated && (
                             <button
                                 type="button"
                                 className={
                                     progressStatus === "COMPLETED"
-                                        ? "btn btn-success me-2"
-                                        : "btn btn-outline-success me-2"
+                                        ? "btn btn-success"
+                                        : "btn btn-outline-success"
                                 }
                                 onClick={handleMarkCompleted}
                                 disabled={

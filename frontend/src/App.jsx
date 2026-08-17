@@ -17,68 +17,103 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import NotFound from "./pages/NotFound/NotFound";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
+import Footer from "./components/Footer/Footer";
 
 function App() {
     return (
         <BrowserRouter>
+            <div className="d-flex flex-column min-vh-100">
 
-            <Navbar />
+                <Navbar />
 
-            <Routes>
+                <div className="flex-grow-1">
+                    <Routes>
+                        <Route path="/" element={<Home />} />
 
-                <Route path="/" element={<Home />} />
+                        <Route path="/questions" element={<Questions />} />
 
-                <Route path="/questions" element={<Questions />} />
+                        <Route
+                            path="/favorites"
+                            element={
+                                <ProtectedRoute>
+                                    <Favorites />
+                                </ProtectedRoute>
+                            }
+                        />
 
-                <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>}/>
+                        <Route
+                            path="/dashboard"
+                            element={
+                                <ProtectedRoute>
+                                    <Dashboard />
+                                </ProtectedRoute>
+                            }
+                        />
 
-                <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>}/>
-            
-                <Route path="/practice" element={<ProtectedRoute><Practice /></ProtectedRoute>}/>
+                        <Route
+                            path="/practice"
+                            element={
+                                <ProtectedRoute>
+                                    <Practice />
+                                </ProtectedRoute>
+                            }
+                        />
 
-                <Route path="/pricing" element={<Pricing />} />
+                        <Route path="/pricing" element={<Pricing />} />
 
-                <Route path="/questions/:id" element={<QuestionDetails />} />
+                        <Route
+                            path="/questions/:id"
+                            element={<QuestionDetails />}
+                        />
 
-                <Route path="/login" element={<Login />} />
+                        <Route path="/login" element={<Login />} />
 
-                <Route path="/register" element={<Register />} />
+                        <Route path="/register" element={<Register />} />
 
-                <Route path="*" element={<NotFound />} />
+                        <Route
+                            path="/forgot-password"
+                            element={<ForgotPassword />}
+                        />
 
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                
-                <Route path="/reset-password" element={<ResetPassword />} />
+                        <Route
+                            path="/reset-password"
+                            element={<ResetPassword />}
+                        />
 
-                <Route
-                    path="/admin"
-                    element={
-                        <ProtectedRoute requiredRole="ADMIN">
-                            <Admin />
-                        </ProtectedRoute>
-                    }
-                />
+                        <Route
+                            path="/admin"
+                            element={
+                                <ProtectedRoute requiredRole="ADMIN">
+                                    <Admin />
+                                </ProtectedRoute>
+                            }
+                        />
 
-                <Route
-                    path="/admin/questions/new"
-                    element={
-                        <ProtectedRoute requiredRole="ADMIN">
-                            <QuestionForm />
-                        </ProtectedRoute>
-                    }
-                />
+                        <Route
+                            path="/admin/questions/new"
+                            element={
+                                <ProtectedRoute requiredRole="ADMIN">
+                                    <QuestionForm />
+                                </ProtectedRoute>
+                            }
+                        />
 
-		<Route
-    		    path="/admin/questions/:id/edit"
-                    element={
-                        <ProtectedRoute requiredRole="ADMIN">
-                            <QuestionForm />
-                        </ProtectedRoute>
-                   }
-                />
+                        <Route
+                            path="/admin/questions/:id/edit"
+                            element={
+                                <ProtectedRoute requiredRole="ADMIN">
+                                    <QuestionForm />
+                                </ProtectedRoute>
+                            }
+                        />
 
-            </Routes>
+                        <Route path="*" element={<NotFound />} />
+                    </Routes>
+                </div>
 
+                <Footer />
+
+            </div>
         </BrowserRouter>
     );
 }

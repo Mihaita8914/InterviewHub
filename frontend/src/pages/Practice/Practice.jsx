@@ -251,7 +251,15 @@ function Practice() {
                             )}
 
                             {difficulty && (
-                                <span className="badge text-bg-warning">
+                                <span
+                                    className={
+                                        difficulty === "EASY"
+                                            ? "badge text-bg-success"
+                                            : difficulty === "HARD"
+                                                ? "badge text-bg-danger"
+                                                : "badge text-bg-warning"
+                                    }
+                                >
                                     {formatLabel(difficulty)}
                                 </span>
                             )}
@@ -344,7 +352,7 @@ function Practice() {
                     </div>
                 </div>
 
-                <article className="card border-0 shadow-sm">
+                <article className="card border-0 shadow-sm rounded-4 overflow-hidden">
                     <div className="card-body p-4 p-md-5">
                         <div className="d-flex flex-wrap gap-2 mb-3">
                             <span className="badge text-bg-primary">
@@ -363,11 +371,19 @@ function Practice() {
                                 </span>
                             )}
 
-                            <span className="badge text-bg-warning">
-                                {formatLabel(
-                                    currentQuestion.difficulty
-                                )}
-                            </span>
+                                <span
+                                    className={
+                                        currentQuestion.difficulty === "EASY"
+                                            ? "badge text-bg-success"
+                                            : currentQuestion.difficulty === "HARD"
+                                                ? "badge text-bg-danger"
+                                                : "badge text-bg-warning"
+                                    }
+                                >
+                                    {formatLabel(
+                                        currentQuestion.difficulty
+                                    )}
+                                </span>
                         </div>
 
                         <h2 className="h3 fw-bold">
@@ -375,20 +391,23 @@ function Practice() {
                         </h2>
 
                         <section className="py-3">
-                            <h3 className="h5 fw-bold">
-                                Question
-                            </h3>
+                            <div className="bg-light rounded-4 p-4">
+                                <span className="text-primary text-uppercase fw-bold small">
+                                    Interview Question
+                                </span>
 
-                            <p className="text-secondary">
-                                {currentQuestion.question}
-                            </p>
+                                <p className="fs-5 fw-semibold mt-2 mb-0">
+                                    {currentQuestion.question}
+                                </p>
+                            </div>
                         </section>
 
                         {!showAnswer ? (
-                            <div className="text-center py-5">
+                            <div className="text-center py-4 py-md-5">
                                 <p className="text-secondary mb-3">
-                                    Think about how you would answer this question
-                                    in a real interview.
+                                    Answer the question yourself first, just like
+                                    in a real interview. Reveal the prepared answer
+                                    when you're ready.
                                 </p>
 
                                 <button
@@ -402,9 +421,21 @@ function Practice() {
                         ) : (
                             <>
                                 <section className="py-3">
-                                    <h3 className="h5 fw-bold">
-                                        Answer
-                                    </h3>
+                                    <div className="d-flex align-items-center gap-2 mb-3">
+                                        <span
+                                            className="bg-success-subtle text-success rounded-circle d-inline-flex align-items-center justify-content-center fw-bold"
+                                            style={{
+                                                width: "32px",
+                                                height: "32px"
+                                            }}
+                                        >
+                                            ✓
+                                        </span>
+
+                                        <h3 className="h5 fw-bold mb-0">
+                                            Answer
+                                        </h3>
+                                    </div>
 
                                     <div
                                         className="rich-text-display text-secondary"
@@ -436,7 +467,7 @@ function Practice() {
                                             Common Mistakes
                                         </h3>
 
-                                        <div className="alert alert-warning mb-0">
+                                        <div className="alert alert-warning border-0 rounded-4 mb-0">
                                             {currentQuestion.commonMistakes}
                                         </div>
                                     </section>
@@ -476,7 +507,8 @@ function Practice() {
                                 onClick={handleMarkCompleted}
                                 disabled={
                                     progressLoading ||
-                                    progressStatus === "COMPLETED"
+                                    progressStatus === "COMPLETED" ||
+                                    !showAnswer
                                 }
                             >
                                 {progressLoading

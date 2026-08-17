@@ -55,7 +55,7 @@ function Login() {
                 className="container"
                 style={{ maxWidth: "520px" }}
             >
-                <div className="card border-0 shadow-sm">
+                <div className="card border-0 shadow-sm rounded-4">
                     <div className="card-body p-4 p-md-5">
                         <div className="text-center mb-4">
                             <span className="badge text-bg-primary mb-3">
@@ -92,7 +92,8 @@ function Login() {
                                 <input
                                     id="email"
                                     type="email"
-                                    className="form-control"
+                                    className="form-control form-control-lg"
+                                    placeholder="you@example.com"
                                     value={email}
                                     onChange={event =>
                                         setEmail(event.target.value)
@@ -123,7 +124,8 @@ function Login() {
                                 <input
                                     id="password"
                                     type="password"
-                                    className="form-control"
+                                    className="form-control form-control-lg"
+                                    placeholder="Enter your password"
                                     value={password}
                                     onChange={event =>
                                         setPassword(event.target.value)
@@ -136,7 +138,7 @@ function Login() {
 
                             <button
                                 type="submit"
-                                className="btn btn-primary w-100 py-2"
+                                className="btn btn-primary btn-lg w-100"
                                 disabled={loading}
                             >
                                 {loading
@@ -145,7 +147,13 @@ function Login() {
                             </button>
                         </form>
 
-                        <p className="text-center text-secondary mt-4 mb-0">
+                        <div className="text-center mt-3">
+                            <small className="text-secondary">
+                                Free during public beta · No credit card required
+                            </small>
+                        </div>
+
+                        <p className="text-center text-secondary mt-3 mb-0">
                             Don&apos;t have an account?{" "}
                             <Link to="/register">
                                 Create one for free

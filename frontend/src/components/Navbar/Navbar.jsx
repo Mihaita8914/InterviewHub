@@ -1,5 +1,6 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import "./Navbar.css";
 
 function Navbar() {
     const navigate = useNavigate();
@@ -16,8 +17,10 @@ function Navbar() {
     }
 
     function getNavLinkClass({ isActive }) {
-        return `nav-link px-3 ${
-            isActive ? "active fw-semibold" : ""
+        return `nav-link px-3 position-relative ${
+            isActive
+                ? "active fw-semibold text-white"
+                : "text-white-50"
         }`;
     }
 
@@ -30,10 +33,11 @@ function Navbar() {
                     to="/"
                 >
                     <span
-                        className="d-inline-flex align-items-center justify-content-center bg-primary rounded"
+                        className="d-inline-flex align-items-center justify-content-center bg-primary rounded-3 fw-bold"
                         style={{
-                            width: "38px",
-                            height: "38px"
+                            width: "40px",
+                            height: "40px",
+                            fontSize: "14px"
                         }}
                     >
                         {"</>"}
@@ -133,10 +137,18 @@ function Navbar() {
                             </>
                         ) : (
                             <>
-                                <div className="text-light me-lg-2">
-                                    <small className="text-secondary d-block">
-                                        Signed in as
-                                    </small>
+                                <div className="d-flex align-items-center gap-2 text-light me-lg-2">
+                                    <div
+                                        className="rounded-circle bg-primary d-flex align-items-center justify-content-center fw-bold"
+                                        style={{
+                                            width: "36px",
+                                            height: "36px"
+                                        }}
+                                    >
+                                        {(user?.username || user?.email || "U")
+                                            .charAt(0)
+                                            .toUpperCase()}
+                                    </div>
 
                                     <span className="fw-semibold">
                                         {user?.username || user?.email || "User"}
