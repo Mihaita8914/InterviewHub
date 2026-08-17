@@ -5,9 +5,11 @@ import { getFavorites } from "../../api/FavoriteService";
 import { getRandomQuestion } from "../../api/QuestionService";
 import { QUESTION_CATEGORIES } from "../../constants/questionCategories";
 import { getLastPracticedQuestion, getProgressSummary, getCategoryProgress, getContinueQuestionByCategory } from "../../api/ProgressService";
+import { useTranslation } from "react-i18next";
 
 
 function Dashboard() {
+    const { t } = useTranslation();
     const { user } = useAuth();
 
     const [favorites, setFavorites] = useState([]);
@@ -103,13 +105,13 @@ async function handleContinueCategory(category) {
                 setRandomQuestion(null);
                 setRandomError(
                     randomResult.reason?.response?.data?.error ||
-                    "The practice question could not be loaded."
+                    t("dashboard.errors.practiceQuestion")
                 );
             }
         } catch (requestError) {
             setError(
                 requestError.response?.data?.error ||
-                "Dashboard data could not be loaded."
+                t("dashboard.errors.dashboard")
             );
         } finally {
             setLoading(false);
@@ -126,7 +128,7 @@ async function handleContinueCategory(category) {
     } catch (requestError) {
         setRandomError(
             requestError.response?.data?.error ||
-            "A new practice question could not be loaded."
+            t("dashboard.errors.randomQuestion")
         );
     } finally {
         setRandomLoading(false);
@@ -153,12 +155,12 @@ async function handleContinueCategory(category) {
                     role="status"
                 >
                     <span className="visually-hidden">
-                        Loading...
+                        {t("dashboard.loadingQuestion")}
                     </span>
                 </div>
 
                 <p className="text-secondary mt-3">
-                    Preparing your dashboard...
+                    {t("dashboard.loading")}
                 </p>
             </div>
         );
@@ -173,17 +175,17 @@ async function handleContinueCategory(category) {
 
             <div className="col-12 col-lg-7">
                 <span className="badge text-bg-primary mb-3">
-                    YOUR PREPARATION WORKSPACE
+                    {t("dashboard.workspace")}
                 </span>
 
                 <h1 className="display-6 fw-bold mb-3">
-                    Welcome back,{" "}
-                    {user?.username || "Developer"}!
+                    {t("dashboard.welcome", {
+                        username: user?.username || "Developer"
+                    })}
                 </h1>
 
                 <p className="text-white-50 fs-5 mb-4">
-                    Keep building confidence for your next
-                    Java backend interview.
+                    {t("dashboard.subtitle")}
                 </p>
 
                 <div className="d-flex flex-column flex-sm-row gap-2">
@@ -191,14 +193,14 @@ async function handleContinueCategory(category) {
                         to="/questions"
                         className="btn btn-primary"
                     >
-                        Practice questions
+                        {t("dashboard.practiceQuestions")}
                     </Link>
 
                     <Link
                         to="/favorites"
                         className="btn btn-outline-light"
                     >
-                        View favorites
+                        {t("dashboard.viewFavorites")}
                     </Link>
                 </div>
             </div>
@@ -207,7 +209,7 @@ async function handleContinueCategory(category) {
                 <div className="bg-white bg-opacity-10 rounded-4 p-4">
                     <div className="d-flex justify-content-between align-items-center mb-2">
                         <span className="text-white-50">
-                            Practice completion
+                            {t("dashboard.practiceCompletion")}
                         </span>
 
                         <strong className="fs-4">
@@ -234,7 +236,7 @@ async function handleContinueCategory(category) {
                             </div>
 
                             <small className="text-white-50">
-                                Completed
+                                {t("dashboard.completed")}
                             </small>
                         </div>
 
@@ -244,7 +246,7 @@ async function handleContinueCategory(category) {
                             </div>
 
                             <small className="text-white-50">
-                                In progress
+                                {t("dashboard.inProgress")}
                             </small>
                         </div>
 
@@ -254,7 +256,7 @@ async function handleContinueCategory(category) {
                             </div>
 
                             <small className="text-white-50">
-                                Saved
+                                {t("dashboard.saved")}
                             </small>
                         </div>
                     </div>
@@ -277,7 +279,7 @@ async function handleContinueCategory(category) {
                             className="btn btn-sm btn-outline-danger"
                             onClick={loadDashboard}
                         >
-                            Try again
+                            {t("dashboard.tryAgain")}
                         </button>
                     </div>
                 )}
@@ -288,11 +290,11 @@ async function handleContinueCategory(category) {
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-4">
             <div>
                 <h2 className="h4 fw-bold mb-1">
-                    Your progress by category
+                    {t("dashboard.progressByCategory")}
                 </h2>
 
                 <p className="text-secondary mb-0">
-                    Focus only on the technologies you want to study.
+                    {t("dashboard.progressSubtitle")}
                 </p>
             </div>
         </div>
@@ -300,14 +302,14 @@ async function handleContinueCategory(category) {
         {categoryProgress.length === 0 ? (
             <div className="text-center py-4">
                 <p className="text-secondary mb-3">
-                    You have not started any category yet.
+                    {t("dashboard.noCategoryStarted")}
                 </p>
 
                 <Link
                     to="/questions"
                     className="btn btn-primary"
                 >
-                    Start practicing
+                    {t("dashboard.startPracticing")}
                 </Link>
             </div>
         ) : (
@@ -346,13 +348,17 @@ async function handleContinueCategory(category) {
                             </div>
 
                             <small className="text-secondary">
-                                {item.completedQuestions} of{" "}
-                                {item.totalQuestions} completed
+                                {t("dashboard.completedOf", {
+                                    completed: item.completedQuestions,
+                                    total: item.totalQuestions
+                                })}
 
                                 {item.inProgressQuestions > 0 && (
                                     <>
                                         {" · "}
-                                        {item.inProgressQuestions} in progress
+                                        {t("dashboard.inProgressCount", {
+                                            count: item.inProgressQuestions
+                                        })}
                                     </>
                                 )}
                             </small>
@@ -373,8 +379,8 @@ async function handleContinueCategory(category) {
                                 }}
                             >
                                 {item.completionPercentage === 100
-                                    ? "Review"
-                                    : "Continue"}
+                                    ? t("dashboard.review")
+                                    : t("dashboard.continue")}
                             </button>
 
                                 <button
@@ -384,7 +390,7 @@ async function handleContinueCategory(category) {
                                         navigate(`/practice?category=${item.category}`)
                                     }
                                 >
-                                    Practice
+                                    {t("dashboard.practice")}
                                 </button>
                             </div>
                         </div>
@@ -395,11 +401,11 @@ async function handleContinueCategory(category) {
     </div>
 </section>
 
-<section className="card border-0 shadow-sm mb-4">
-    <div className="card-body p-4">
-        <span className="badge text-bg-success mb-3">
-            Continue practicing
-        </span>
+            <section className="card border-0 shadow-sm mb-4">
+                <div className="card-body p-4">
+                <span className="badge text-bg-success mb-3">
+                    {t("dashboard.continuePracticing")}
+                </span>
 
         {lastPracticedQuestion ? (
             <>
@@ -438,24 +444,24 @@ async function handleContinueCategory(category) {
                         )
                     }
                 >
-                    Continue practice
+                    {t("dashboard.continuePractice")}
                 </button>
             </>
         ) : (
             <>
                 <h2 className="h4 fw-bold">
-                    Start your first practice session
+                    {t("dashboard.firstSession")}
                 </h2>
 
                 <p className="text-secondary">
-                    Open a question while logged in and it will appear here.
+                    {t("dashboard.firstSessionDescription")}
                 </p>
 
                 <Link
                     to="/questions"
                     className="btn btn-outline-primary"
                 >
-                    Browse questions
+                    {t("dashboard.browseQuestions")}
                 </Link>
             </>
         )}
@@ -467,11 +473,11 @@ async function handleContinueCategory(category) {
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-4">
             <div>
                 <h2 className="h4 fw-bold mb-1">
-                    Explore new categories
+                    {t("dashboard.exploreCategories")}
                 </h2>
 
                 <p className="text-secondary mb-0">
-                    Start practicing technologies you have not explored yet.
+                    {t("dashboard.exploreCategoriesSubtitle")}
                 </p>
             </div>
 
@@ -479,14 +485,14 @@ async function handleContinueCategory(category) {
                 to="/questions"
                 className="btn btn-sm btn-outline-primary"
             >
-                View all questions
+                {t("dashboard.viewAllQuestions")}
             </Link>
         </div>
 
         {notStartedCategories.length === 0 ? (
             <div className="text-center py-4">
                 <p className="text-secondary mb-0">
-                    You have started all available categories.
+                    {t("dashboard.allCategoriesStarted")}
                 </p>
             </div>
         ) : (
@@ -529,7 +535,7 @@ async function handleContinueCategory(category) {
         <div className="card-body p-4">
             <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-3">
                     <span className="badge text-bg-warning align-self-start">
-                        Practice suggestion
+                        {t("dashboard.practiceSuggestion")}
                     </span>
 
                 <button
@@ -538,9 +544,9 @@ async function handleContinueCategory(category) {
                     onClick={loadNewRandomQuestion}
                     disabled={randomLoading}
                 >
-                    {randomLoading
-                        ? "Loading..."
-                        : "New random question"}
+                {randomLoading
+                    ? t("dashboard.loadingQuestion")
+                    : t("dashboard.newRandomQuestion")}
                 </button>
             </div>
 
@@ -580,13 +586,13 @@ async function handleContinueCategory(category) {
                         to={`/questions/${randomQuestion.id}`}
                         className="btn btn-primary"
                     >
-                        Start practicing
+                        {t("dashboard.startPracticing")}
                     </Link>
                 </>
             ) : (
                 !randomError && (
                     <p className="text-secondary mb-0">
-                        No practice question is available.
+                        {t("dashboard.noPracticeQuestion")}
                     </p>
                 )
             )}
@@ -599,29 +605,28 @@ async function handleContinueCategory(category) {
                             <div className="card-body p-4">
                                 <div className="d-flex justify-content-between align-items-center mb-3">
                                     <h2 className="h4 fw-bold mb-0">
-                                        Recent favorites
+                                        {t("dashboard.recentFavorites")}
                                     </h2>
 
                                     <Link
                                         to="/favorites"
                                         className="small"
                                     >
-                                        View all
+                                        {t("dashboard.viewAll")}
                                     </Link>
                                 </div>
 
                                 {latestFavorites.length === 0 ? (
                                     <div>
                                         <p className="text-secondary">
-                                            You have not saved any questions
-                                            yet.
+                                            {t("dashboard.noFavorites")}
                                         </p>
 
                                         <Link
                                             to="/questions"
                                             className="btn btn-outline-primary"
                                         >
-                                            Find questions
+                                            {t("dashboard.findQuestions")}
                                         </Link>
                                     </div>
                                 ) : (

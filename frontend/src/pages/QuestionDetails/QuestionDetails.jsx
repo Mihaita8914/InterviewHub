@@ -7,6 +7,7 @@ import { markQuestionAsViewed, markQuestionAsCompleted, getQuestionProgressStatu
 import { getQuestionById } from "../../api/QuestionService";
 import { addFavorite, getFavoriteStatus, removeFavorite } from "../../api/FavoriteService";
 import { useAuth } from "../../context/AuthContext";
+import FollowUpQuestions from "../../components/FollowUpQuestions/FollowUpQuestions";
 
 function formatLabel(value) {
     if (!value) {
@@ -19,20 +20,6 @@ function formatLabel(value) {
         .replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
-function getFollowUpQuestions(value) {
-    if (!value) {
-        return [];
-    }
-
-    if (Array.isArray(value)) {
-        return value.filter(Boolean);
-    }
-
-    return value
-        .split(/\r?\n/)
-        .map((item) => item.replace(/^[-*•]\s*/, "").trim())
-        .filter(Boolean);
-}
 
 function QuestionDetails() {
     const { id } = useParams();
@@ -199,9 +186,6 @@ async function handleMarkCompleted() {
         return null;
     }
 
-    const followUpQuestions = getFollowUpQuestions(
-        question.followUpQuestions
-    );
 
     return (
         <main className="bg-light min-vh-100 py-4 py-md-5">
@@ -355,26 +339,9 @@ async function handleMarkCompleted() {
                             </section>
                         )}
 
-                        {followUpQuestions.length > 0 && (
-                            <section className="py-3">
-                                <h2 className="h4 fw-bold">
-                                    Follow-up Questions
-                                </h2>
-
-                                <ul className="mb-0">
-                                    {followUpQuestions.map(
-                                        (followUpQuestion, index) => (
-                                            <li
-                                                key={`${followUpQuestion}-${index}`}
-                                                className="mb-2"
-                                            >
-                                                {followUpQuestion}
-                                            </li>
-                                        )
-                                    )}
-                                </ul>
-                            </section>
-                        )}
+                        <FollowUpQuestions
+                            value={question.followUpQuestions}
+                        />
 
                         <div className="d-flex flex-column flex-sm-row gap-2 mt-4 pt-4 border-top">
                         {isAuthenticated && (

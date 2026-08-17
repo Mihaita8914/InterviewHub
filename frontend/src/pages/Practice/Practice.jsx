@@ -5,6 +5,7 @@ import DOMPurify from "dompurify";
 
 import { getQuestions } from "../../api/QuestionService";
 import { getQuestionProgressStatus, markQuestionAsCompleted, markQuestionAsViewed } from "../../api/ProgressService";
+import FollowUpQuestions from "../../components/FollowUpQuestions/FollowUpQuestions";
 
 import "../../components/Common/RichTextEditor.css";
 
@@ -473,17 +474,9 @@ function Practice() {
                                     </section>
                                 )}
 
-                                {currentQuestion.followUpQuestions && (
-                                    <section className="py-3">
-                                        <h3 className="h5 fw-bold">
-                                            Follow-up Questions
-                                        </h3>
-
-                                        <div className="text-secondary">
-                                            {currentQuestion.followUpQuestions}
-                                        </div>
-                                    </section>
-                                )}
+                                <FollowUpQuestions
+                                    value={currentQuestion.followUpQuestions}
+                                />
                             </>
                         )}
 

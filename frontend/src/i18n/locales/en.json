@@ -1,0 +1,70 @@
+{
+  "nav": {
+    "home": "Home",
+    "questions": "Questions",
+    "favorites": "Favorites",
+    "pricing": "Pricing",
+    "dashboard": "Dashboard",
+    "admin": "Admin",
+    "login": "Login",
+    "logout": "Logout",
+    "startFree": "Start Free"
+  },
+
+  "dashboard": {
+  "loading": "Preparing your dashboard...",
+  "workspace": "YOUR PREPARATION WORKSPACE",
+  "welcome": "Welcome back, {{username}}!",
+  "subtitle": "Keep building confidence for your next Java backend interview.",
+  "practiceQuestions": "Practice questions",
+  "viewFavorites": "View favorites",
+
+  "practiceCompletion": "Practice completion",
+  "completed": "Completed",
+  "inProgress": "In progress",
+  "saved": "Saved",
+  "tryAgain": "Try again",
+
+  "progressByCategory": "Your progress by category",
+  "progressSubtitle": "Focus only on the technologies you want to study.",
+  "noCategoryStarted": "You have not started any category yet.",
+  "startPracticing": "Start practicing",
+  "completedOf": "{{completed}} of {{total}} completed",
+  "inProgressCount": "{{count}} in progress",
+  "review": "Review",
+  "continue": "Continue",
+  "practice": "Practice",
+
+  "continuePracticing": "Continue practicing",
+  "continuePractice": "Continue practice",
+  "firstSession": "Start your first practice session",
+  "firstSessionDescription": "Open a question while logged in and it will appear here.",
+  "browseQuestions": "Browse questions",
+
+  "exploreCategories": "Explore new categories",
+  "exploreCategoriesSubtitle": "Start practicing technologies you have not explored yet.",
+  "viewAllQuestions": "View all questions",
+  "allCategoriesStarted": "You have started all available categories.",
+
+  "practiceSuggestion": "Practice suggestion",
+  "loadingQuestion": "Loading...",
+  "newRandomQuestion": "New random question",
+  "noPracticeQuestion": "No practice question is available.",
+
+  "recentFavorites": "Recent favorites",
+  "viewAll": "View all",
+  "noFavorites": "You have not saved any questions yet.",
+  "findQuestions": "Find questions",
+
+  "errors": {
+    "practiceQuestion": "The practice question could not be loaded.",
+    "dashboard": "Dashboard data could not be loaded.",
+    "randomQuestion": "A new practice question could not be loaded."
+  }
+},
+  
+  "language": {
+    "english": "English",
+    "romanian": "Romanian"
+  }
+}

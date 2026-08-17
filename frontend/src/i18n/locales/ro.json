@@ -1,0 +1,70 @@
+{
+  "nav": {
+    "home": "Acasă",
+    "questions": "Întrebări",
+    "favorites": "Favorite",
+    "pricing": "Prețuri",
+    "dashboard": "Panou",
+    "admin": "Admin",
+    "login": "Autentificare",
+    "logout": "Deconectare",
+    "startFree": "Începe gratuit"
+  },
+
+  "dashboard": {
+  "loading": "Pregătim panoul tău...",
+  "workspace": "SPAȚIUL TĂU DE PREGĂTIRE",
+  "welcome": "Bine ai revenit, {{username}}!",
+  "subtitle": "Continuă să capeți încredere pentru următorul tău interviu Java Backend.",
+  "practiceQuestions": "Exersează întrebări",
+  "viewFavorites": "Vezi favoritele",
+
+  "practiceCompletion": "Progresul pregătirii",
+  "completed": "Finalizate",
+  "inProgress": "În progres",
+  "saved": "Salvate",
+  "tryAgain": "Încearcă din nou",
+
+  "progressByCategory": "Progresul tău pe categorii",
+  "progressSubtitle": "Concentrează-te pe tehnologiile pe care vrei să le studiezi.",
+  "noCategoryStarted": "Nu ai început încă nicio categorie.",
+  "startPracticing": "Începe pregătirea",
+  "completedOf": "{{completed}} din {{total}} finalizate",
+  "inProgressCount": "{{count}} în progres",
+  "review": "Recapitulează",
+  "continue": "Continuă",
+  "practice": "Exersează",
+
+  "continuePracticing": "Continuă pregătirea",
+  "continuePractice": "Continuă pregătirea",
+  "firstSession": "Începe prima sesiune de pregătire",
+  "firstSessionDescription": "Deschide o întrebare cât timp ești autentificat și aceasta va apărea aici.",
+  "browseQuestions": "Vezi întrebările",
+
+  "exploreCategories": "Explorează categorii noi",
+  "exploreCategoriesSubtitle": "Începe să exersezi tehnologii pe care nu le-ai explorat încă.",
+  "viewAllQuestions": "Vezi toate întrebările",
+  "allCategoriesStarted": "Ai început toate categoriile disponibile.",
+
+  "practiceSuggestion": "Sugestie de pregătire",
+  "loadingQuestion": "Se încarcă...",
+  "newRandomQuestion": "Altă întrebare aleatorie",
+  "noPracticeQuestion": "Nu există nicio întrebare disponibilă pentru pregătire.",
+
+  "recentFavorites": "Favorite recente",
+  "viewAll": "Vezi toate",
+  "noFavorites": "Nu ai salvat încă nicio întrebare.",
+  "findQuestions": "Găsește întrebări",
+
+  "errors": {
+    "practiceQuestion": "Întrebarea pentru pregătire nu a putut fi încărcată.",
+    "dashboard": "Datele panoului nu au putut fi încărcate.",
+    "randomQuestion": "Nu a putut fi încărcată o nouă întrebare."
+  }
+},
+
+  "language": {
+    "english": "Engleză",
+    "romanian": "Română"
+  }
+}

@@ -1,8 +1,10 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "./Navbar.css";
+import { useTranslation } from "react-i18next";
 
 function Navbar() {
+    const { t, i18n } = useTranslation();
     const navigate = useNavigate();
 
     const {
@@ -10,6 +12,15 @@ function Navbar() {
         isAuthenticated,
         logoutUser
     } = useAuth();
+
+    function changeLanguage(language) {
+        i18n.changeLanguage(language);
+
+        localStorage.setItem(
+            "interviewhub-language",
+            language
+        );
+    }
 
     function handleLogout() {
         logoutUser();
@@ -67,34 +78,37 @@ function Navbar() {
                     className="collapse navbar-collapse"
                     id="mainNavbar"
                 >
+
+
                     <div className="navbar-nav mx-auto">
 
                         <NavLink
                             className={getNavLinkClass}
                             to="/"
                         >
-                            Home
+                            {t("nav.home")}
                         </NavLink>
 
                         <NavLink
                             className={getNavLinkClass}
                             to="/questions"
                         >
-                            Questions
+                            {t("nav.questions")}
                         </NavLink>
                         {isAuthenticated && (
                             <NavLink
                                 className={getNavLinkClass}
                                 to="/favorites"
                             >
-                                Favorites
+                                {t("nav.favorites")}
                             </NavLink>
                         )}
+
                         <NavLink
                             className={getNavLinkClass}
                             to="/pricing"
                         >
-                            Pricing
+                            {t("nav.pricing")}
                         </NavLink>
 
                         {isAuthenticated && (
@@ -102,7 +116,7 @@ function Navbar() {
                                 className={getNavLinkClass}
                                 to="/dashboard"
                             >
-                                Dashboard
+                                {t("nav.dashboard")}
                             </NavLink>
                         )}
 
@@ -111,11 +125,38 @@ function Navbar() {
                                 className={getNavLinkClass}
                                 to="/admin"
                             >
-                                Admin
+                                {t("nav.admin")}
                             </NavLink>
                         )}
-
                     </div>
+
+                <div className="me-lg-3 my-3 my-lg-0">
+                    <div className="btn-group btn-group-sm">
+                        <button
+                            type="button"
+                            className={
+                                i18n.language === "en"
+                                    ? "btn btn-primary"
+                                    : "btn btn-outline-light"
+                            }
+                            onClick={() => changeLanguage("en")}
+                        >
+                            EN
+                        </button>
+
+                        <button
+                            type="button"
+                            className={
+                                i18n.language === "ro"
+                                    ? "btn btn-primary"
+                                    : "btn btn-outline-light"
+                            }
+                            onClick={() => changeLanguage("ro")}
+                        >
+                            RO
+                        </button>
+                    </div>
+            </div>
 
                     <div className="d-flex flex-column flex-lg-row align-items-lg-center gap-2 mt-3 mt-lg-0">
 
@@ -125,14 +166,14 @@ function Navbar() {
                                     className="btn btn-outline-light"
                                     to="/login"
                                 >
-                                    Login
+                                    {t("nav.login")}
                                 </Link>
 
                                 <Link
                                     className="btn btn-primary"
                                     to="/register"
                                 >
-                                    Start Free
+                                    {t("nav.startFree")}
                                 </Link>
                             </>
                         ) : (
@@ -160,7 +201,7 @@ function Navbar() {
                                     className="btn btn-outline-light"
                                     onClick={handleLogout}
                                 >
-                                    Logout
+                                    {t("nav.logout")}
                                 </button>
                             </>
                         )}
