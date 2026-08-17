@@ -17,4 +17,7 @@ public class CategoryProgressResponse {
     private long inProgressQuestions;
 
     private int completionPercentage;
+
+    private long totalQuestions;
+
 }

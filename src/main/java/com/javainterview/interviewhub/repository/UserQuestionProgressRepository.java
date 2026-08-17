@@ -24,6 +24,12 @@ public interface UserQuestionProgressRepository
             Category category
     );
 
+    Optional<UserQuestionProgress>
+    findFirstByUserAndStatusOrderByLastViewedAtDesc(
+            User user,
+            ProgressStatus status
+    );
+
 
     List<UserQuestionProgress> findByUser(User user);
 

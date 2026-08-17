@@ -36,16 +36,24 @@ async function handleContinueCategory(category) {
         const progress =
             await getContinueQuestionByCategory(category);
 
-        console.log("CONTINUE RESPONSE", progress);
-
-        if (progress?.question?.id) {
-            navigate(`/questions/${progress.question.id}`);
+        if (
+            progress?.category &&
+            progress?.index !== undefined
+        ) {
+            navigate(
+                `/practice?category=${progress.category}&index=${progress.index}`
+            );
             return;
         }
 
-        navigate(`/questions?category=${category}`);
+        navigate(`/practice?category=${category}`);
     } catch (error) {
-        console.error(error);
+        console.error(
+            "Continue practice could not be loaded.",
+            error
+        );
+
+        navigate(`/practice?category=${category}`);
     }
 }
 
@@ -126,6 +134,16 @@ async function handleContinueCategory(category) {
 }
 
     const latestFavorites = favorites.slice(0, 3);
+
+    const startedCategories = new Set(
+    categoryProgress.map(item => item.category)
+);
+
+    const notStartedCategories =
+        QUESTION_CATEGORIES.filter(
+            category =>
+                !startedCategories.has(category.value)
+        );
 
     if (loading) {
         return (
@@ -315,23 +333,46 @@ async function handleContinueCategory(category) {
                             </div>
 
                             <small className="text-secondary">
-                                {item.completedQuestions} completed
-                                {" · "}
-                                {item.inProgressQuestions} in progress
-                                {" · "}
-                                {item.startedQuestions} started
+                                {item.completedQuestions} of{" "}
+                                {item.totalQuestions} completed
+
+                                {item.inProgressQuestions > 0 && (
+                                    <>
+                                        {" · "}
+                                        {item.inProgressQuestions} in progress
+                                    </>
+                                )}
                             </small>
 
-                            <div className="mt-3">
+                            <div className="mt-3 d-flex flex-wrap gap-2">
                             <button
                                 type="button"
                                 className="btn btn-sm btn-outline-primary"
-                                onClick={() =>
-                                    handleContinueCategory(item.category)
-                                }
+                                onClick={() => {
+                                    if (item.completionPercentage === 100) {
+                                        navigate(
+                                            `/practice?category=${item.category}`
+                                        );
+                                        return;
+                                    }
+
+                                    handleContinueCategory(item.category);
+                                }}
                             >
-                                Continue
+                                {item.completionPercentage === 100
+                                    ? "Review"
+                                    : "Continue"}
                             </button>
+
+                                <button
+                                    type="button"
+                                    className="btn btn-sm btn-primary"
+                                    onClick={() =>
+                                        navigate(`/practice?category=${item.category}`)
+                                    }
+                                >
+                                    Practice
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -346,11 +387,11 @@ async function handleContinueCategory(category) {
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-4">
             <div>
                 <h2 className="h4 fw-bold mb-1">
-                    Practice by category
+                    Explore new categories
                 </h2>
 
                 <p className="text-secondary mb-0">
-                    Choose a category and start preparing.
+                    Start practicing technologies you have not explored yet.
                 </p>
             </div>
 
@@ -362,35 +403,43 @@ async function handleContinueCategory(category) {
             </Link>
         </div>
 
-        <div className="row g-3">
-            {QUESTION_CATEGORIES.map(category => (
-                <div
-                    key={category.value}
-                    className="col-12 col-sm-6 col-lg-4"
-                >
-                    <Link
-                        to={`/questions?category=${category.value}`}
-                        className="card h-100 border text-decoration-none text-dark"
+        {notStartedCategories.length === 0 ? (
+            <div className="text-center py-4">
+                <p className="text-secondary mb-0">
+                    You have started all available categories.
+                </p>
+            </div>
+        ) : (
+            <div className="row g-3">
+                {notStartedCategories.map(category => (
+                    <div
+                        key={category.value}
+                        className="col-12 col-sm-6 col-lg-4"
                     >
-                        <div className="card-body">
-                            <div className="d-flex justify-content-between align-items-center mb-2">
-                                <h3 className="h5 fw-bold mb-0">
-                                    {category.label}
-                                </h3>
+                        <Link
+                            to={`/questions?category=${category.value}`}
+                            className="card h-100 border text-decoration-none text-dark"
+                        >
+                            <div className="card-body">
+                                <div className="d-flex justify-content-between align-items-center mb-2">
+                                    <h3 className="h5 fw-bold mb-0">
+                                        {category.label}
+                                    </h3>
 
-                                <span className="text-primary">
-                                    →
-                                </span>
+                                    <span className="text-primary">
+                                        →
+                                    </span>
+                                </div>
+
+                                <p className="small text-secondary mb-0">
+                                    {category.shortDescription}
+                                </p>
                             </div>
-
-                            <p className="small text-secondary mb-0">
-                                {category.shortDescription}
-                            </p>
-                        </div>
-                    </Link>
-                </div>
-            ))}
-        </div>
+                        </Link>
+                    </div>
+                ))}
+            </div>
+        )}
     </div>
 </section>
 

@@ -75,6 +75,10 @@ public class QuestionController {
             @RequestParam(required = false) Topic topic,
             @RequestParam(required = false) Difficulty difficulty,
             @RequestParam(required = false) String keyword,
+            @org.springframework.data.web.PageableDefault(
+                    sort = "id",
+                    direction = org.springframework.data.domain.Sort.Direction.ASC
+            )
             Pageable pageable
     ) {
         return ResponseEntity.ok(

@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import Practice from "./pages/Practice/Practice";
 
 import Home from "./pages/Home/Home";
 import Questions from "./pages/Questions/Questions";
@@ -32,6 +33,8 @@ function App() {
                 <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>}/>
 
                 <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>}/>
+            
+                <Route path="/practice" element={<ProtectedRoute><Practice /></ProtectedRoute>}/>
 
                 <Route path="/pricing" element={<Pricing />} />
 

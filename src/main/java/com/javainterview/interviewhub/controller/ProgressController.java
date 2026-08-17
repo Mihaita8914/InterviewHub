@@ -1,7 +1,6 @@
 package com.javainterview.interviewhub.controller;
 
-import com.javainterview.interviewhub.dto.ProgressResponse;
-import com.javainterview.interviewhub.dto.ProgressSummaryResponse;
+import com.javainterview.interviewhub.dto.*;
 import com.javainterview.interviewhub.enums.Category;
 import com.javainterview.interviewhub.service.ProgressService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -9,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import com.javainterview.interviewhub.dto.CategoryProgressResponse;
-import com.javainterview.interviewhub.dto.QuestionProgressStatusResponse;
 
 import java.util.List;
 
@@ -79,8 +76,9 @@ public class ProgressController {
                 )
         );
     }
+
     @GetMapping("/categories/{category}/continue")
-    public ResponseEntity<ProgressResponse> getContinueQuestionByCategory(
+    public ResponseEntity<ContinuePracticeResponse> getContinueQuestionByCategory(
             @PathVariable Category category,
             Authentication authentication
     ) {

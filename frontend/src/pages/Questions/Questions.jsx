@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { getQuestions } from "../../api/QuestionService";
 import QuestionCard from "../../components/QuestionCard/QuestionCard";
 import SearchBar from "../../components/SearchBar/SearchBar";
@@ -8,6 +8,7 @@ import Pagination from "../../components/Pagination/Pagination";
 
 function Questions() {
     const [searchParams, setSearchParams] = useSearchParams();
+    const navigate = useNavigate();
 
     const categoryFromUrl = searchParams.get("category") || "";
     const topicFromUrl = searchParams.get("topic") || "";
@@ -152,6 +153,30 @@ function handleRetry() {
     setReloadKey(currentValue => currentValue + 1);
 }
 
+    function handleStartPractice() {
+        const params = new URLSearchParams();
+
+        if (category) {
+            params.set("category", category);
+        }
+
+        if (topic) {
+            params.set("topic", topic);
+        }
+
+        if (difficulty) {
+            params.set("difficulty", difficulty);
+        }
+
+        const query = params.toString();
+
+        navigate(
+            query
+                ? `/practice?${query}`
+                : "/practice"
+        );
+    }
+
     return (
         <main className="bg-light min-vh-100 py-4 py-md-5">
             <div className="container">
@@ -170,7 +195,7 @@ function handleRetry() {
                     </p>
                 </header>
 
-                <section className="card border-0 shadow-sm mb-4">
+                    <section className="card border-0 shadow-sm mb-4">
                     <div className="card-body p-3 p-md-4">
                         <SearchBar
                             searchTerm={searchTerm}
@@ -183,10 +208,18 @@ function handleRetry() {
                             difficulty={difficulty}
                             onCategoryChange={handleCategoryChange}
                             onTopicChange={handleTopicChange}
-                            onDifficultyChange={
-                                handleDifficultyChange
-                            }
+                            onDifficultyChange={handleDifficultyChange}
                         />
+
+                        <div className="d-flex justify-content-end mt-3">
+                            <button
+                                type="button"
+                                className="btn btn-primary"
+                                onClick={handleStartPractice}
+                            >
+                                Start Practice
+                            </button>
+                        </div>
                     </div>
                 </section>
 

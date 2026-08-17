@@ -1,7 +1,6 @@
 package com.javainterview.interviewhub.service;
 
-import com.javainterview.interviewhub.dto.ProgressResponse;
-import com.javainterview.interviewhub.dto.ProgressSummaryResponse;
+import com.javainterview.interviewhub.dto.*;
 import com.javainterview.interviewhub.entity.Question;
 import com.javainterview.interviewhub.entity.User;
 import com.javainterview.interviewhub.entity.UserQuestionProgress;
@@ -14,12 +13,11 @@ import com.javainterview.interviewhub.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.javainterview.interviewhub.dto.QuestionProgressStatusResponse;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import com.javainterview.interviewhub.dto.CategoryProgressResponse;
+
 import com.javainterview.interviewhub.enums.Category;
 
 import java.util.EnumMap;
@@ -166,7 +164,10 @@ public class ProgressService {
         User user = getUser(email);
 
         return progressRepository
-                .findFirstByUserOrderByLastViewedAtDesc(user)
+                .findFirstByUserAndStatusOrderByLastViewedAtDesc(
+                        user,
+                        ProgressStatus.IN_PROGRESS
+                )
                 .map(this::toResponse);
     }
 
@@ -235,6 +236,10 @@ public class ProgressService {
                     List<UserQuestionProgress> categoryProgress =
                             entry.getValue();
 
+                    long totalQuestions =
+                            questionRepository
+                                    .countByCategoryAndPublishedTrue(category);
+
                     long startedQuestions = categoryProgress.size();
 
                     long completedQuestions = categoryProgress.stream()
@@ -248,15 +253,15 @@ public class ProgressService {
                             startedQuestions - completedQuestions;
 
                     int completionPercentage =
-                            startedQuestions == 0
+                            totalQuestions == 0
                                     ? 0
                                     : (int) Math.round(
                                     completedQuestions * 100.0
-                                            / startedQuestions
+                                            / totalQuestions
                             );
-
                     return CategoryProgressResponse.builder()
                             .category(category)
+                            .totalQuestions(totalQuestions)
                             .startedQuestions(startedQuestions)
                             .completedQuestions(completedQuestions)
                             .inProgressQuestions(inProgressQuestions)
@@ -272,89 +277,34 @@ public class ProgressService {
                 .toList();
     }
 
-    @Transactional
-    public Optional<ProgressResponse> getContinueQuestionByCategory(
+    @Transactional(readOnly = true)
+    public Optional<ContinuePracticeResponse> getContinueQuestionByCategory(
             String email,
             Category category
     ) {
         User user = getUser(email);
 
-        Optional<UserQuestionProgress> inProgress =
-                progressRepository
-                        .findFirstByUserAndStatusAndQuestion_CategoryOrderByLastViewedAtDesc(
-                                user,
-                                ProgressStatus.IN_PROGRESS,
-                                category
-                        );
-
-        if (inProgress.isPresent()) {
-            return inProgress.map(this::toResponse);
-        }
-
-        List<Question> publishedQuestions =
-                questionRepository
-                        .findByCategoryAndPublishedTrueOrderByIdAsc(
-                                category
-                        );
-
-        if (publishedQuestions.isEmpty()) {
-            return Optional.empty();
-        }
-
-        List<UserQuestionProgress> userProgress =
-                progressRepository.findByUser(user);
-
-        java.util.Set<Long> completedQuestionIds =
-                userProgress.stream()
-                        .filter(progress ->
-                                progress.getStatus()
-                                        == ProgressStatus.COMPLETED
-                        )
-                        .map(progress ->
-                                progress.getQuestion().getId()
-                        )
-                        .collect(
-                                java.util.stream.Collectors.toSet()
-                        );
-
-        Optional<Question> firstNotCompleted =
-                publishedQuestions.stream()
-                        .filter(question ->
-                                !completedQuestionIds.contains(
-                                        question.getId()
-                                )
-                        )
-                        .findFirst();
-
-        Question questionToContinue =
-                firstNotCompleted.orElse(
-                        publishedQuestions.getFirst()
-                );
-
-        UserQuestionProgress progress =
-                progressRepository
-                        .findByUserAndQuestion(
-                                user,
-                                questionToContinue
-                        )
-                        .orElseGet(() ->
-                                UserQuestionProgress.builder()
-                                        .user(user)
-                                        .question(questionToContinue)
-                                        .status(
-                                                ProgressStatus.IN_PROGRESS
-                                        )
-                                        .build()
-                        );
-
-        progress.setStatus(ProgressStatus.IN_PROGRESS);
-        progress.setLastViewedAt(LocalDateTime.now());
-        progress.setCompletedAt(null);
-
-        return Optional.of(
-                toResponse(
-                        progressRepository.save(progress)
+        return progressRepository
+                .findFirstByUserAndStatusAndQuestion_CategoryOrderByLastViewedAtDesc(
+                        user,
+                        ProgressStatus.IN_PROGRESS,
+                        category
                 )
-        );
+                .map(progress -> {
+                    Question question = progress.getQuestion();
+
+                    long index =
+                            questionRepository
+                                    .countByCategoryAndPublishedTrueAndIdLessThan(
+                                            category,
+                                            question.getId()
+                                    );
+
+                    return ContinuePracticeResponse.builder()
+                            .category(category)
+                            .questionId(question.getId())
+                            .index(index)
+                            .build();
+                });
     }
 }

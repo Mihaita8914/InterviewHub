@@ -56,4 +56,13 @@ public interface QuestionRepository extends
             Boolean published,
             Pageable pageable
     );
+
+    long countByCategoryAndPublishedTrue(
+            Category category
+    );
+    long countByCategoryAndPublishedTrueAndIdLessThan(
+            Category category,
+            Long id
+    );
+
 }
