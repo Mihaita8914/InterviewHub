@@ -5,12 +5,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javainterview.interviewhub.entity.Question;
 import com.javainterview.interviewhub.enums.Category;
 import com.javainterview.interviewhub.enums.Difficulty;
+import com.javainterview.interviewhub.enums.Topic;
 import com.javainterview.interviewhub.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.stereotype.Component;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +52,7 @@ public class DataInitializer implements CommandLineRunner {
                                 .commonMistakes(seed.commonMistakes())
                                 .followUpQuestions(seed.followUpQuestions())
                                 .category(seed.category())
+                                .topic(seed.topic())
                                 .difficulty(seed.difficulty())
                                 .published(seed.published() != null ? seed.published() : true)
                                 .build()
@@ -68,6 +71,7 @@ public class DataInitializer implements CommandLineRunner {
             String commonMistakes,
             String followUpQuestions,
             Category category,
+            Topic topic,
             Difficulty difficulty,
             Boolean published
     ) {
